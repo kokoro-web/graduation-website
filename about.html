@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>研究概要</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:sans-serif;
+    background:#f5f5f5;
+}
+
+.back-button{
+    position:absolute;
+    top:15px;
+    left:15px;
+    padding:8px 15px;
+    background-color:#999;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+}
+
+.back-button:hover{
+    background-color:#666;
+}
+
+header{
+    background:#333;
+    color:white;
+    text-align:center;
+    padding:40px;
+}
+
+.container{
+    width:90%;
+    margin:auto;
+    padding:40px 0;
+}
+
+.section{
+    background:white;
+    margin-bottom:30px;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.section h2{
+    margin-bottom:20px;
+    font-size:30px;
+}
+
+.section p{
+    line-height:2;
+    font-size:17px;
+}
+
+.section ul{
+    line-height:2;
+    font-size:17px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="top.html" class="back-button">
+← トップ
+</a>
+
+<header>
+
+<h1>研究概要</h1>
+
+<p>
+訪日外国人の国籍別訪問パターン変化の可視化と類型化
+</p>
+
+</header>
+
+<div class="container">
+
+<!-- 背景 -->
+
+<div class="section">
+
+<h2>研究背景</h2>
+
+<p>
+近年、訪日外国人旅行者数は増加傾向にあり、日本各地でインバウンド観光が重要な役割を担っている。
+一方で、訪問地域や観光行動は国籍によって異なり、その特徴を把握することは地域観光政策や観光振興を考える上で重要である。
+</p>
+
+</div>
+
+<!-- 目的 -->
+
+<div class="section">
+
+<h2>研究目的</h2>
+
+<p>
+本研究では、訪日外国人の都道府県別訪問率を地図上で可視化し、
+国籍ごとの観光行動の特徴や変化を明らかにすることを目的とする。<br>
+さらに、訪問率変化のパターンをもとにクラスタ分析を行い、
+類似した観光傾向を持つ国・地域の類型化を試みる。
+</p>
+
+</div>
+
+<!-- データ -->
+
+<div class="section">
+
+<h2>使用データ</h2>
+
+<p>
+観光庁「インバウンド消費動向調査（旧：訪日外国人消費動向調査）」の
+都道府県別訪問率データを使用。
+</p>
+
+<ul>
+<li>対象期間：2015年～2025年（2020～2022年はコロナ禍のため除く）</li>
+<li>対象：20か国・地域</li>
+<li>分析項目：都道府県別訪問率</li>
+</ul>
+
+</div>
+
+<!-- 方法 -->
+
+<div class="section">
+
+<h2>分析方法</h2>
+
+<ul>
+<li>都道府県別訪問率マップの作成</li>
+<li>国別の年次推移分析</li>
+<li>年度間比較による変化分析</li>
+<li>K-means法によるクラスタ分析</li>
+</ul>
+
+<p>
+地図の作成にはPythonおよびFoliumを用い、
+都道府県別訪問率の分布や変化を可視化した。<br>
+また、各国の訪問率変化データを用いてクラスタ分析を行い、
+観光行動パターンの類型化を実施した。
+</p>
+
+</div>
+
+<!-- サイト構成 -->
+
+<div class="section">
+
+<h2>サイト構成</h2>
+
+<ul>
+<li><b>訪問率比較分析</b>：国と年度を選択し、訪問率を比較</li>
+<li><b>年次推移分析</b>：スライダーを用いて年ごとの変化を確認</li>
+<li><b>クラスタ分析</b>：訪問パターンの類型化結果を表示</li>
+</ul>
+
+</div>
+
+<!-- 特徴 -->
+
+<div class="section">
+
+<h2>本研究の特徴</h2>
+
+<p>
+既存の観光統計では単年データの閲覧が中心であるが、
+本研究では訪問率を地図上で可視化し、
+国籍ごとの変化を視覚的に比較できる点に特徴がある。
+さらに、クラスタ分析を組み合わせることで、
+国ごとの観光行動パターンの共通性や相違点を把握できるようにした。
+</p>
+
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>考察</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:sans-serif;
+    background:#f5f5f5;
+}
+
+/* 戻るボタン */
+.back-button{
+    position:absolute;
+    top:15px;
+    left:15px;
+    padding:8px 15px;
+    background:#999;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+}
+
+.back-button:hover{
+    background:#666;
+}
+
+/* ヘッダー */
+header{
+    background:#333;
+    color:white;
+    text-align:center;
+    padding:50px;
+}
+
+header h1{
+    margin:0;
+    font-size:40px;
+}
+
+/* 本文 */
+.container{
+    width:90%;
+    max-width:1100px;
+    margin:auto;
+    padding:40px 0;
+}
+
+/* セクション */
+.section{
+    background:white;
+    padding:30px;
+    margin-bottom:30px;
+    border-radius:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.section h2{
+    margin-top:0;
+    border-left:6px solid #333;
+    padding-left:10px;
+}
+
+.section p{
+    line-height:2;
+}
+
+/* 特徴ボックス */
+.feature-box{
+    background:#f8f9fa;
+    padding:15px;
+    border-left:6px solid #4CAF50;
+    border-radius:5px;
+    margin:20px 0;
+    line-height:2;
+}
+
+.feature-box-red{
+    background:#f8f9fa;
+    padding:15px;
+    border-left:6px solid #e53935;
+    border-radius:5px;
+    margin:20px 0;
+    line-height:2;
+}
+
+/* フッター */
+.footer{
+    text-align:center;
+    color:#666;
+    padding:30px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="cluster.html" class="back-button">
+← クラスタ分析へ戻る
+</a>
+
+<header>
+
+<h1>考察</h1>
+
+<p>
+クラスタ分析結果から得られた特徴について考察する
+</p>
+
+</header>
+
+<div class="container">
+
+<!-- はじめに -->
+
+<div class="section">
+
+<h2>考察対象クラスタ</h2>
+
+<p>
+本研究ではクラスタ分析により4つのクラスタが形成された。<br>
+その中でも特徴が顕著であり、解釈が可能であった
+「クラスタ2（アジア市場型）」および
+「クラスタ3（ロシア型）」について考察を行う。
+</p>
+
+</div>
+
+<!-- クラスタ2 -->
+
+<div class="section">
+
+<h2>クラスタ2（アジア市場型）</h2>
+
+<div class="feature-box">
+
+<b>特徴</b><br>
+
+✓ 首都圏（東京・千葉・神奈川）の訪問率が低下<br>
+
+✓ 京都・奈良・山梨など一部地域で微増<br>
+
+✓ 全体として大きな変化は見られない
+
+</div>
+
+<p>
+クラスタ2には、韓国、中国、台湾、香港、タイ、
+シンガポール、マレーシア、インドネシア、
+フィリピン、ベトナムが含まれた。
+</p>
+
+<p>
+2015年と2025年を比較すると、
+首都圏における訪問率の低下が見られる一方で、
+京都府や奈良県、山梨県など一部地域では増加が確認された。
+しかし、その変化は比較的小さく、
+特定地域への大幅な集中は確認されなかった。
+</p>
+
+<p>
+これらの国・地域は訪日客数が多く、
+日本との距離も近いことから、
+訪日観光市場として成熟していると考えられる。
+そのため、訪問パターンが既に定着しており、
+2015年から2025年にかけて大きな変化が生じにくかった
+可能性がある。
+</p>
+
+<p>
+以上のことから、本クラスタは
+<b>「成熟したアジア市場を反映した安定型クラスタ」</b>
+であると解釈できる。
+</p>
+
+</div>
+
+<!-- クラスタ3 -->
+
+<div class="section">
+
+<h2>クラスタ3（ロシア型）</h2>
+
+<div class="feature-box-red">
+
+<b>特徴</b><br>
+
+✓ 京都府 +52.8ポイント<br>
+
+✓ 大阪府 +59.6ポイント<br>
+
+✓ 関西圏への集中傾向
+
+</div>
+
+<p>
+クラスタ3はロシアのみで構成される単独クラスタであり、
+他のクラスタとは異なる特徴的な訪問パターンを示した。
+</p>
+
+<p>
+2015年と2025年を比較すると、
+大阪府および京都府の訪問率が大幅に上昇しており、
+関西圏への集中傾向が確認された。
+この増加幅は他クラスタと比較しても非常に大きく、
+本研究における特徴的な結果の一つである。
+</p>
+
+<p>
+一方で、滞在日数や訪日者数の変化のみでは、
+この訪問パターンを十分に説明することは難しい。
+そのため、本研究では関西圏への集中という特徴的な結果を
+確認するにとどめ、その背景要因については
+今後さらに検討する必要があると考える。
+</p>
+
+<p>
+しかし、ロシア市場が他国とは異なる観光行動を示したことは
+興味深く、訪日外国人の観光行動には
+国籍ごとの特徴が存在する可能性が示唆された。
+</p>
+
+</div>
+
+<!-- まとめ -->
+
+<div class="section">
+
+<h2>まとめ</h2>
+
+<p>
+クラスタ分析の結果、アジア市場型では比較的安定した訪問パターンが確認された一方、
+ロシア型では関西圏への顕著な集中が見られた。
+</p>
+
+<p>
+このことから、訪日外国人の観光行動の変化には
+国籍ごとの特徴が存在することが示唆された。
+</p>
+
+<p>
+今後は、滞在日数や旅行目的など他の指標も組み合わせることで、
+訪日外国人の観光行動をより多面的に分析できると考えられる。
+</p>
+
+</div>
+
+</div>
+
+<div class="footer">
+2026 Graduation Research.
+</div>
+
+</body>
+</html>

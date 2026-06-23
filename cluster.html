@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>クラスタ分析</title>
+
+<style>
+
+body{
+    font-family:sans-serif;
+    margin:0;
+    text-align:center;
+    background:#f8f8f8;
+}
+
+/* 戻るボタン */
+.back-button{
+    position:absolute;
+    top:15px;
+    left:15px;
+    padding:8px 15px;
+    background:#999;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+}
+
+/* クラスタ枠 */
+.cluster-box{
+    width:90%;
+    margin:30px auto;
+    background:white;
+    border-radius:10px;
+    padding:20px;
+    box-shadow:0 0 8px rgba(0,0,0,0.1);
+}
+
+iframe{
+    width:100%;
+    height:500px;
+    border:none;
+}
+
+.country-list{
+    margin:10px 0;
+    font-weight:bold;
+}
+
+.description{
+    width:90%;
+    margin:auto;
+    line-height:1.8;
+}
+
+</style>
+</head>
+
+<body>
+
+<a href="top.html" class="back-button">← トップ</a>
+
+<h1>クラスタ分析（2015→2025）</h1>
+
+<p>
+本分析では、2015年から2025年までの10年間における訪問率の変化を用いてクラスタリングを行った。
+長期的な観光行動の変化傾向を把握することを目的としている。
+</p>
+
+<!-- クラスタ0 -->
+
+<div class="cluster-box">
+
+<h2>クラスタ0</h2>
+
+<div class="country-list">
+ドイツ・スペイン・カナダ・オーストラリア
+</div>
+
+<iframe src="ドイツ_2015_2025_diff_map.html"></iframe>
+
+<div class="description">
+関西圏や富士山周辺への訪問が拡大しており、主要観光地を広域的に周遊する傾向がみられる。
+代表国としてドイツを掲載した。
+</div>
+
+</div>
+
+<!-- クラスタ1 -->
+
+<div class="cluster-box">
+
+<h2>クラスタ1</h2>
+
+<div class="country-list">
+米国・英国・フランス・イタリア・インド
+</div>
+
+<iframe src="米国_2015_2025_diff_map.html"></iframe>
+
+<div class="description">
+大阪府、京都府、東京都に加え、広島県の訪問率増加が特徴的である。
+ゴールデンルートに加え地方都市への周遊傾向がみられる。
+代表国として米国を掲載した。
+</div>
+
+</div>
+
+<!-- クラスタ2 -->
+
+<div class="cluster-box">
+
+<h2>クラスタ2</h2>
+
+<div class="country-list">
+韓国・台湾・香港・中国・タイ・シンガポール・マレーシア・インドネシア・フィリピン・ベトナム
+</div>
+
+<iframe src="韓国_2015_2025_diff_map.html"></iframe>
+
+<div class="description">
+全体的に減少傾向がみられる。
+代表国として韓国を掲載した。
+</div>
+
+</div>
+
+<!-- クラスタ3 -->
+
+<div class="cluster-box">
+
+<h2>クラスタ3</h2>
+
+<div class="country-list">
+ロシア
+</div>
+
+<iframe src="ロシア_2015_2025_diff_map.html"></iframe>
+
+<div class="description">
+大阪府および京都府の訪問率増加が特に大きく、
+関西圏への集中傾向がみられた。
+ロシアのみで構成される単独クラスタである。
+
+</div>
+<div style="
+margin-top:80px;
+margin-bottom:60px;
+text-align:center;
+">
+
+<h2>クラスタ分析の考察</h2>
+
+<p style="
+font-size:18px;
+color:#666;
+line-height:1.8;
+margin-bottom:30px;
+">
+
+クラスタ分析の結果から得られた特徴について、
+アジア市場型およびロシア型クラスタを中心に考察を行った。
+
+</p>
+
+<a href="discussion.html" style="
+display:inline-block;
+background:#333;
+color:white;
+text-decoration:none;
+padding:15px 35px;
+border-radius:10px;
+font-size:18px;
+font-weight:bold;
+transition:0.3s;
+">
+考察を見る →
+</a>
+</div>
+</div>
+</body>
+</html>

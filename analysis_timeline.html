@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8">
+<title>年次推移分析</title>
+
+<style>
+
+body{
+    font-family:sans-serif;
+    margin:0;
+    text-align:center;
+    background:#f5f5f5;
+}
+
+.back-button{
+    position:absolute;
+    top:15px;
+    left:15px;
+    padding:8px 15px;
+    background:#999;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+}
+
+header{
+    background:#333;
+    color:white;
+    padding:30px;
+}
+
+.control-box{
+    width:85%;
+    margin:20px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+select{
+    padding:8px;
+    font-size:16px;
+    margin:10px;
+}
+
+#yearValue{
+    font-size:24px;
+    font-weight:bold;
+    color:#333;
+    margin:15px;
+}
+
+iframe{
+    width:95%;
+    height:650px;
+    border:none;
+    background:white;
+}
+
+input[type=range]{
+    width:60%;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="top.html" class="back-button">
+← トップ
+</a>
+
+<header>
+<h1>年次推移分析</h1>
+<p>スライダーで年度を切り替えて推移を確認</p>
+</header>
+
+<div class="control-box">
+
+<label>国：</label>
+
+<select id="country" onchange="changeMap()">
+
+<option value="韓国">韓国</option>
+<option value="台湾">台湾</option>
+<option value="香港">香港</option>
+<option value="中国">中国</option>
+<option value="タイ">タイ</option>
+<option value="シンガポール">シンガポール</option>
+<option value="マレーシア">マレーシア</option>
+<option value="インドネシア">インドネシア</option>
+<option value="フィリピン">フィリピン</option>
+<option value="ベトナム">ベトナム</option>
+<option value="インド">インド</option>
+<option value="英国">英国</option>
+<option value="ドイツ">ドイツ</option>
+<option value="フランス">フランス</option>
+<option value="イタリア">イタリア</option>
+<option value="スペイン">スペイン</option>
+<option value="ロシア">ロシア</option>
+<option value="米国">米国</option>
+<option value="カナダ">カナダ</option>
+<option value="オーストラリア">オーストラリア</option>
+
+</select>
+
+<br><br>
+
+<div id="yearValue">2015年</div>
+
+<input
+type="range"
+min="0"
+max="7"
+value="0"
+id="yearSlider"
+oninput="changeMap()"
+style="width:60%;"
+>
+
+<div style="
+width:60%;
+margin:8px auto 0 auto;
+display:flex;
+justify-content:space-between;
+font-size:13px;
+color:#555;
+">
+
+<span>2015</span>
+<span>2016</span>
+<span>2017</span>
+<span>2018</span>
+<span>2019</span>
+<span>2023</span>
+<span>2024</span>
+<span>2025</span>
+
+</div>
+<!-- 横長凡例 -->
+<div style="
+width:800px;
+margin:10px auto;
+background:white;
+border:1px solid black;
+font-size:14px;
+padding:10px;
+text-align:center;
+">
+
+<b>訪問率：</b>
+
+<span style="background:#e5ffe5;color:black;">■</span> 0〜2%
+
+<span style="background:#b3ffb3;color:black;">■</span> 3〜5%
+
+<span style="background:#ffff66;color:black;">■</span> 6〜10%
+
+<span style="background:#ffcc66;color:black;">■</span> 11〜20%
+
+<span style="background:#ff6666;color:black;">■</span> 21〜30%
+
+<span style="background:#cc0000;color:black;">■</span> 31〜50%
+
+<span style="background:#660099;color:black;">■</span> 51%以上
+
+</div>
+
+<p style="font-size:12px;color:#666;">
+色が濃いほど訪問率が高いことを示す
+</p>
+
+<iframe
+id="mapFrame"
+src="韓国_2015.html">
+</iframe>
+
+<script>
+
+const years = [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2023,
+    2024,
+    2025
+];
+
+function changeMap(){
+
+    let country =
+        document.getElementById("country").value;
+
+    let index =
+        document.getElementById("yearSlider").value;
+
+    let year = years[index];
+
+    document.getElementById("yearValue").innerHTML =
+        year + "年";
+
+    document.getElementById("mapFrame").src =
+        country + "_" + year + ".html";
+}
+
+</script>
+
+</body>
+</html>

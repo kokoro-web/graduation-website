@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>訪日外国人観光分析</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:sans-serif;
+    background:#f5f5f5;
+}
+
+/* ヘッダー */
+header{
+    background-image:url("https://images.unsplash.com/photo-1528164344705-47542687000d");
+    background-size:cover;
+    background-position:center;
+    color:white;
+    text-align:center;
+    padding:120px 20px;
+}
+
+/* 黒背景 */
+.overlay{
+    background:rgba(0,0,0,0.5);
+    padding:40px;
+    border-radius:20px;
+    display:inline-block;
+}
+
+header h1{
+    font-size:50px;
+    margin-bottom:20px;
+}
+
+header p{
+    font-size:20px;
+    line-height:2;
+}
+
+/* 全体 */
+.container{
+    width:90%;
+    margin:auto;
+    padding:50px 0;
+}
+
+/* カード */
+.card{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom:40px;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card h2{
+    font-size:30px;
+    margin-bottom:20px;
+}
+
+.card p{
+    line-height:1.8;
+    margin-bottom:30px;
+    font-size:17px;
+}
+
+/* ボタン */
+.button{
+    display:inline-block;
+    background:#333;
+    color:white;
+    text-decoration:none;
+    padding:15px 30px;
+    border-radius:10px;
+    font-size:18px;
+}
+
+.button:hover{
+    background:#555;
+}
+
+/* 下3つ */
+.bottom-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:30px;
+}
+
+/* フッター */
+.footer{
+    text-align:center;
+    padding:30px;
+    color:#666;
+}
+
+@media(max-width:1000px){
+
+.bottom-grid{
+    grid-template-columns:1fr;
+}
+
+header h1{
+    font-size:36px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="overlay">
+
+<h1>✈ 訪日外国人観光分析</h1>
+
+<p>
+インバウンド消費動向調査を用いて、<br>
+訪日外国人の都道府県別訪問率の変化と<br>
+観光行動の特徴を分析するWebサイト
+</p>
+
+</div>
+
+</header>
+
+<div class="container">
+
+<!-- 概要 -->
+<div class="card">
+
+<h2>研究概要</h2>
+
+<p>
+本サイトでは、観光庁「インバウンド消費動向調査」のデータを用いて、
+訪日外国人の都道府県別訪問率を可視化し、
+国ごとの観光行動の特徴や変化を分析する。<br>
+また、訪問率の変化パターンをもとにクラスタ分析を行い、
+類似した観光傾向を持つ国の類型化を試みた。
+</p>
+
+<a class="button" href="about.html">
+見る
+</a>
+
+</div>
+
+<!-- 下3つ -->
+<div class="bottom-grid">
+
+<!-- 訪問率比較 -->
+<div class="card">
+
+<h2>訪問率比較分析</h2>
+
+<p>
+国と年度を選択し、
+訪問率を比較する
+</p>
+
+<a class="button" href="analysis.html">
+見る
+</a>
+
+</div>
+
+<!-- 年次推移 -->
+<div class="card">
+
+<h2>年次推移分析</h2>
+
+<p>
+訪問率の年次推移を確認する
+</p>
+
+<a class="button" href="analysis_timeline.html">
+見る
+</a>
+
+</div>
+
+<!-- クラスタ分析 -->
+<div class="card">
+
+<h2>クラスタ分析</h2>
+
+<p>
+訪問率変化パターンをもとに、
+国ごとの観光傾向を類型化する
+</p>
+
+<a class="button" href="cluster.html">
+見る
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">
+2026 Graduation Research
+</div>
+
+</body>
+</html>
