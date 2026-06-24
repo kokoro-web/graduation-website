@@ -104,6 +104,11 @@ async function drawDiffMap(){
 
     const startData =
         parseCSV(startText,country);
+    alert(
+JSON.stringify(
+Object.keys(startData).slice(0,10)
+)
+);
 
     const endData =
         parseCSV(endText,country);
