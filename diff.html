@@ -32,7 +32,14 @@ background:#333;
 color:white;
 padding:30px;
 }
-
+.control-box{
+    width:85%;
+    margin:20px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
 
 h1{
     margin-top:30px;
@@ -352,7 +359,38 @@ map.fitBounds(
 
 }
 
+const legend =
+    L.control({
+        position:'bottomright'
+    });
 
+legend.onAdd = function(){
+
+    const div =
+        L.DomUtil.create(
+            'div',
+            'legend'
+        );
+
+    div.innerHTML =
+
+    "<b>差分 (%)</b><br>" +
+
+    "<span style='color:#800026'>■</span> +20以上<br>" +
+    "<span style='color:#E31A1C'>■</span> +10～20<br>" +
+    "<span style='color:#FD8D3C'>■</span> 0～10<br>" +
+
+    "<span style='color:#6BAED6'>■</span> -5～0<br>" +
+    "<span style='color:#2171B5'>■</span> -15～-5<br>" +
+    "<span style='color:#084594'>■</span> -15以下";
+
+    return div;
+};
+
+legend.addTo(map);
+
+</div>
+    
 </script>
 
 </body>
