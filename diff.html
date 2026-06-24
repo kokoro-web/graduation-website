@@ -9,30 +9,39 @@ href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <style>
 
-body{.back-button{
-    position:absolute;
-    top:15px;
-    left:15px;
-    padding:8px 15px;
-    background:#999;
-    color:white;
-    text-decoration:none;
-    border-radius:5px;
+body{
+margin:0;
+font-family:sans-serif;
+background:#f5f5f5;
+text-align:center;
+}
+
+.back-button{
+position:absolute;
+top:15px;
+left:15px;
+padding:8px 15px;
+background:#999;
+color:white;
+text-decoration:none;
+border-radius:5px;
 }
 
 header{
-    background:#333;
-    color:white;
-    padding:30px;
+background:#333;
+color:white;
+padding:30px;
 }
 
 .control-box{
-    width:85%;
-    margin:20px auto;
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+width:85%;
+margin:20px auto;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
     
     margin:0;
     font-family:sans-serif;
@@ -317,73 +326,47 @@ feature.properties.diff = endVal - startVal;
 
         onEachFeature:function(feature,layer){
 
-    const diff =
-        feature.properties.diff;
+```
+const diff =
+    feature.properties.diff;
 
-    const sign =
-        diff > 0 ? "+" : "";
+const sign =
+    diff > 0 ? "+" : "";
 
-    layer.bindPopup(
+layer.bindPopup(
 
-        "<b>" +
-        feature.properties.nam_ja +
-        "</b><br><br>" +
+    "<b>" +
+    feature.properties.nam_ja +
+    "</b><br><br>" +
 
-        startYear + "年 : " +
-        feature.properties.startVal.toFixed(1) +
-        "%<br>" +
+    startYear + "年 : " +
+    feature.properties.startVal.toFixed(1) +
+    "%<br>" +
 
-        endYear + "年 : " +
-        feature.properties.endVal.toFixed(1) +
-        "%<br><br>" +
+    endYear + "年 : " +
+    feature.properties.endVal.toFixed(1) +
+    "%<br><br>" +
 
-        "差分 : " +
-        sign +
-        diff.toFixed(1) +
-        "%"
+    "差分 : " +
+    sign +
+    diff.toFixed(1) +
+    "%"
 
-    );
-}
-            );
-        }
-
-    }).addTo(map);
-
-    map.fitBounds(
-        geoLayer.getBounds()
-    );
+);
+```
 
 }
 
-const legend =
-    L.control({
-        position:'bottomright'
-    });
+```
+}).addTo(map);
 
-legend.onAdd = function(){
+map.fitBounds(
+    geoLayer.getBounds()
+);
+```
 
-    const div =
-        L.DomUtil.create(
-            'div',
-            'legend'
-        );
+}
 
-    div.innerHTML =
-
-    "<b>差分 (%)</b><br>" +
-
-    "<span style='color:#800026'>■</span> +20以上<br>" +
-    "<span style='color:#E31A1C'>■</span> +10～20<br>" +
-    "<span style='color:#FD8D3C'>■</span> 0～10<br>" +
-
-    "<span style='color:#6BAED6'>■</span> -5～0<br>" +
-    "<span style='color:#2171B5'>■</span> -15～-5<br>" +
-    "<span style='color:#084594'>■</span> -15以下";
-
-    return div;
-};
-
-legend.addTo(map);
 
 </script>
 
