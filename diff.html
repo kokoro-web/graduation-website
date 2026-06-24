@@ -51,19 +51,17 @@ body{
 </select>
 
 <select id="endYear">
-    <option selected>2025</option>
-    <option>2024</option>
-    <option>2023</option>
-    <option>2019</option>
-    <option>2018</option>
-    <option>2017</option>
-    <option>2016</option>
     <option>2015</option>
+    <option>2016</option>
+    <option>2017</option>
+    <option>2018</option>
+    <option>2019</option>
+    <option>2023</option>
+    <option>2024</option>
+    <option selected>2025</option>
 </select>
 
-<button onclick="drawDiffMap()">
-表示
-</button>
+<button onclick="drawDiffMap()">表示</button>
 
 </div>
 
@@ -119,13 +117,16 @@ async function drawDiffMap(){
     geoData.features.forEach(feature=>{
 
         const pref =
-            feature.properties.name;
+            feature.properties.nam_ja
+                .replace("都","")
+                .replace("府","")
+                .replace("県","");
 
         const startVal =
-            startData[pref] || 0;
+            Number(startData[pref]) || 0;
 
         const endVal =
-            endData[pref] || 0;
+            Number(endData[pref]) || 0;
 
         feature.properties.diff =
             endVal - startVal;
@@ -137,23 +138,25 @@ async function drawDiffMap(){
     }
 
     geoLayer = L.geoJSON(geoData,{
+
         style:function(feature){
 
             const v =
                 feature.properties.diff;
 
-            return {
+            return{
                 fillColor:getColor(v),
                 weight:1,
                 color:"#555",
                 fillOpacity:0.8
             };
+
         },
 
         onEachFeature:function(feature,layer){
 
             layer.bindPopup(
-                feature.properties.name +
+                feature.properties.nam_ja +
                 "<br>差分: " +
                 feature.properties.diff.toFixed(2)
             );
@@ -162,12 +165,14 @@ async function drawDiffMap(){
 
     }).addTo(map);
 
+    map.fitBounds(geoLayer.getBounds());
+
 }
 
 function parseCSV(text,country){
 
     const rows =
-        text.split("\n");
+        text.trim().split("\n");
 
     const header =
         rows[0].split(",");
@@ -182,9 +187,9 @@ function parseCSV(text,country){
         const cols =
             rows[i].split(",");
 
-        if(cols.length<2) continue;
+        if(cols.length <= idx) continue;
 
-        data[cols[0]] =
+        data[cols[0].trim()] =
             parseFloat(cols[idx]);
 
     }
@@ -203,11 +208,6 @@ function getColor(v){
 }
 
 </script>
-fetch("japan.geojson")
-  .then(res => res.json())
-  .then(data => {
-      console.log(data.features[0].properties);
-  });
 
 </body>
 </html>
