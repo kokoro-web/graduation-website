@@ -9,7 +9,31 @@ href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <style>
 
-body{
+body{.back-button{
+    position:absolute;
+    top:15px;
+    left:15px;
+    padding:8px 15px;
+    background:#999;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+}
+
+header{
+    background:#333;
+    color:white;
+    padding:30px;
+}
+
+.control-box{
+    width:85%;
+    margin:20px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    
     margin:0;
     font-family:sans-serif;
     background:#f5f5f5;
@@ -74,6 +98,16 @@ button:hover{
 </head>
 
 <body>
+    <a href="index.html" class="back-button">
+← トップ
+</a>
+
+<header>
+<h1>差分分析</h1>
+<p>任意の2年間を比較し、都道府県訪問率の増減を可視化</p>
+</header>
+
+<div class="control-box">
 
 <h1>都道府県訪問率差分分析</h1>
 
@@ -100,6 +134,12 @@ button:hover{
 <option>英国</option>
 <option>ドイツ</option>
 <option>フランス</option>
+<option>イタリア</option>
+<option>スペイン</option>
+<option>ロシア</option>
+<option>米国</option>
+<option>カナダ</option>
+<option>オーストラリア</option>
 
 </select>
 
@@ -250,8 +290,9 @@ async function drawDiffMap(){
         const endVal =
             endData[pref] || 0;
 
-        feature.properties.diff =
-            endVal - startVal;
+        feature.properties.startVal = startVal;
+feature.properties.endVal = endVal;
+feature.properties.diff = endVal - startVal;
 
     });
 
@@ -276,12 +317,33 @@ async function drawDiffMap(){
 
         onEachFeature:function(feature,layer){
 
-            layer.bindPopup(
-                "<b>" +
-                feature.properties.nam_ja +
-                "</b><br>" +
-                "差分: " +
-                feature.properties.diff.toFixed(2)
+    const diff =
+        feature.properties.diff;
+
+    const sign =
+        diff > 0 ? "+" : "";
+
+    layer.bindPopup(
+
+        "<b>" +
+        feature.properties.nam_ja +
+        "</b><br><br>" +
+
+        startYear + "年 : " +
+        feature.properties.startVal.toFixed(1) +
+        "%<br>" +
+
+        endYear + "年 : " +
+        feature.properties.endVal.toFixed(1) +
+        "%<br><br>" +
+
+        "差分 : " +
+        sign +
+        diff.toFixed(1) +
+        "%"
+
+    );
+}
             );
         }
 
