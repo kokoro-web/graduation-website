@@ -107,6 +107,11 @@ async function drawDiffMap(){
 
     const endData =
         parseCSV(endText,country);
+    alert(
+"北海道\n" +
+"開始年: " + startData["北海道"] + "\n" +
+"終了年: " + endData["北海道"]
+);
 
     const geojson =
         await fetch("japan.geojson");
