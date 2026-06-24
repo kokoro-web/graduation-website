@@ -113,6 +113,9 @@ async function drawDiffMap(){
 
     const geoData =
         await geojson.json();
+    
+    console.log(geoData.features[0].properties);
+alert(JSON.stringify(geoData.features[0].properties));
 
     geoData.features.forEach(feature=>{
 
