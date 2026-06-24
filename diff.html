@@ -311,7 +311,7 @@ feature.properties.diff = endVal - startVal;
 
         onEachFeature:function(feature,layer){
 
-```
+
 const diff =
     feature.properties.diff;
 
@@ -338,17 +338,17 @@ layer.bindPopup(
     "%"
 
 );
-```
+
 
 }
 
-```
+
 }).addTo(map);
 
 map.fitBounds(
     geoLayer.getBounds()
 );
-```
+
 
 }
 
