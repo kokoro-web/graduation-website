@@ -2,18 +2,54 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>差分分析</title>
+<title>都道府県訪問率差分分析</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <style>
+
 body{
+    margin:0;
     font-family:sans-serif;
-    text-align:center;
     background:#f5f5f5;
+    text-align:center;
+}
+
+h1{
+    margin-top:30px;
+}
+
+.description{
+    margin-bottom:20px;
+    color:#555;
 }
 
 #controls{
+    margin:20px;
+}
+
+select,button{
+    padding:8px 12px;
+    font-size:15px;
+    margin:5px;
+}
+
+button{
+    background:#333;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#555;
+}
+
+#resultTitle{
+    font-size:22px;
+    font-weight:bold;
     margin:20px;
 }
 
@@ -21,48 +57,86 @@ body{
     width:90%;
     height:700px;
     margin:auto;
+    background:white;
     border:1px solid #ccc;
 }
+
+.legend{
+    background:white;
+    padding:10px;
+    border:1px solid #ccc;
+    line-height:1.7;
+    font-size:13px;
+}
+
 </style>
+
 </head>
 
 <body>
 
-<h1>訪問率差分分析</h1>
+<h1>都道府県訪問率差分分析</h1>
+
+<p class="description">
+開始年と終了年を選択し、
+国籍別の都道府県訪問率の変化を可視化します。
+</p>
 
 <div id="controls">
 
 <select id="country">
-    <option>韓国</option>
-    <option>台湾</option>
-    <option>香港</option>
-    <option>中国</option>
+
+<option>韓国</option>
+<option>台湾</option>
+<option>香港</option>
+<option>中国</option>
+<option>タイ</option>
+<option>シンガポール</option>
+<option>マレーシア</option>
+<option>インドネシア</option>
+<option>フィリピン</option>
+<option>ベトナム</option>
+<option>インド</option>
+<option>英国</option>
+<option>ドイツ</option>
+<option>フランス</option>
+
 </select>
 
 <select id="startYear">
-    <option>2015</option>
-    <option>2016</option>
-    <option>2017</option>
-    <option>2018</option>
-    <option>2019</option>
-    <option>2023</option>
-    <option>2024</option>
-    <option>2025</option>
+
+<option>2015</option>
+<option>2016</option>
+<option>2017</option>
+<option>2018</option>
+<option>2019</option>
+<option>2023</option>
+<option>2024</option>
+<option>2025</option>
+
 </select>
 
 <select id="endYear">
-    <option>2015</option>
-    <option>2016</option>
-    <option>2017</option>
-    <option>2018</option>
-    <option>2019</option>
-    <option>2023</option>
-    <option>2024</option>
-    <option selected>2025</option>
+
+<option>2015</option>
+<option>2016</option>
+<option>2017</option>
+<option>2018</option>
+<option>2019</option>
+<option>2023</option>
+<option>2024</option>
+<option selected>2025</option>
+
 </select>
 
-<button onclick="drawDiffMap()">表示</button>
+<button onclick="drawDiffMap()">
+表示
+</button>
 
+</div>
+
+<div id="resultTitle">
+比較条件を選択してください
 </div>
 
 <div id="map"></div>
@@ -71,116 +145,11 @@ body{
 
 <script>
 
-const map = L.map('map').setView([37.5,137],5);
-
-L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-).addTo(map);
+const map = L.map('map',{
+    zoomControl:true
+}).setView([37.5,137],5);
 
 let geoLayer;
-
-async function drawDiffMap(){
-
-    const country =
-        document.getElementById("country").value;
-
-    const startYear =
-        document.getElementById("startYear").value;
-
-    const endYear =
-        document.getElementById("endYear").value;
-
-   const startCsv =
-    await fetch(`${startYear}_clean.csv`);
-
-const endCsv =
-    await fetch(`${endYear}_clean.csv`);
-
-    const startText =
-        await startCsv.text();
-
-    const endText =
-        await endCsv.text();
-
-    const startData =
-        parseCSV(startText,country);
-    alert(
-JSON.stringify(
-Object.keys(startData).slice(0,10)
-)
-);
-
-    const endData =
-        parseCSV(endText,country);
-    alert(
-"北海道\n" +
-"開始年: " + startData["北海道"] + "\n" +
-"終了年: " + endData["北海道"]
-);
-
-    const geojson =
-        await fetch("japan.geojson");
-
-    const geoData =
-        await geojson.json();
-    
-    console.log(geoData.features[0].properties);
-alert(JSON.stringify(geoData.features[0].properties));
-
-    geoData.features.forEach(feature=>{
-
-        const pref =
-            feature.properties.nam_ja
-                .replace("都","")
-                .replace("府","")
-                .replace("県","");
-
-        const startVal =
-            Number(startData[pref]) || 0;
-
-        const endVal =
-            Number(endData[pref]) || 0;
-
-        feature.properties.diff =
-            endVal - startVal;
-
-    });
-
-    if(geoLayer){
-        map.removeLayer(geoLayer);
-    }
-
-    geoLayer = L.geoJSON(geoData,{
-
-        style:function(feature){
-
-            const v =
-                feature.properties.diff;
-
-            return{
-                fillColor:getColor(v),
-                weight:1,
-                color:"#555",
-                fillOpacity:0.8
-            };
-
-        },
-
-        onEachFeature:function(feature,layer){
-
-            layer.bindPopup(
-                feature.properties.nam_ja +
-                "<br>差分: " +
-                feature.properties.diff.toFixed(2)
-            );
-
-        }
-
-    }).addTo(map);
-
-    map.fitBounds(geoLayer.getBounds());
-
-}
 
 function parseCSV(text,country){
 
@@ -202,26 +171,157 @@ function parseCSV(text,country){
 
         if(cols.length <= idx) continue;
 
-        const pref = cols[0].trim();
+        const pref = cols[0]
+            .replace(/^\uFEFF/,"")
+            .trim();
 
-        data[pref] = Number(cols[idx]);
+        data[pref] =
+            Number(cols[idx]);
 
     }
-
-    console.log(data);
 
     return data;
 }
 
 function getColor(v){
 
-    return v > 10 ? "#b2182b" :
-           v > 5  ? "#ef8a62" :
-           v > 0  ? "#fddbc7" :
-           v > -5 ? "#d1e5f0" :
-           v > -10? "#67a9cf" :
-                    "#2166ac";
+    return v >= 20 ? "#800026" :
+           v >= 15 ? "#BD0026" :
+           v >= 10 ? "#E31A1C" :
+           v >= 5  ? "#FC4E2A" :
+           v >= 0  ? "#FD8D3C" :
+           v >= -5 ? "#6BAED6" :
+           v >= -10? "#4292C6" :
+           v >= -15? "#2171B5" :
+                     "#084594";
 }
+
+async function drawDiffMap(){
+
+    const country =
+        document.getElementById("country").value;
+
+    const startYear =
+        document.getElementById("startYear").value;
+
+    const endYear =
+        document.getElementById("endYear").value;
+
+    document.getElementById("resultTitle").innerHTML =
+        country + "　" +
+        startYear + " → " +
+        endYear + " 差分分析";
+
+    const startCsv =
+        await fetch(`${startYear}_clean.csv`);
+
+    const endCsv =
+        await fetch(`${endYear}_clean.csv`);
+
+    const startText =
+        await startCsv.text();
+
+    const endText =
+        await endCsv.text();
+
+    const startData =
+        parseCSV(startText,country);
+
+    const endData =
+        parseCSV(endText,country);
+
+    const geojson =
+        await fetch("japan.geojson");
+
+    const geoData =
+        await geojson.json();
+
+    geoData.features.forEach(feature=>{
+
+        const pref =
+            feature.properties.nam_ja
+                .replace("都","")
+                .replace("府","")
+                .replace("県","");
+
+        const startVal =
+            startData[pref] || 0;
+
+        const endVal =
+            endData[pref] || 0;
+
+        feature.properties.diff =
+            endVal - startVal;
+
+    });
+
+    if(geoLayer){
+        map.removeLayer(geoLayer);
+    }
+
+    geoLayer = L.geoJSON(geoData,{
+
+        style:function(feature){
+
+            return{
+                fillColor:
+                    getColor(
+                        feature.properties.diff
+                    ),
+                weight:1,
+                color:"#444",
+                fillOpacity:0.8
+            };
+        },
+
+        onEachFeature:function(feature,layer){
+
+            layer.bindPopup(
+                "<b>" +
+                feature.properties.nam_ja +
+                "</b><br>" +
+                "差分: " +
+                feature.properties.diff.toFixed(2)
+            );
+        }
+
+    }).addTo(map);
+
+    map.fitBounds(
+        geoLayer.getBounds()
+    );
+
+}
+
+const legend =
+    L.control({
+        position:'bottomright'
+    });
+
+legend.onAdd = function(){
+
+    const div =
+        L.DomUtil.create(
+            'div',
+            'legend'
+        );
+
+    div.innerHTML =
+
+    "<b>差分 (%)</b><br>" +
+
+    "<span style='color:#800026'>■</span> +20以上<br>" +
+    "<span style='color:#E31A1C'>■</span> +10～20<br>" +
+    "<span style='color:#FD8D3C'>■</span> 0～10<br>" +
+
+    "<span style='color:#6BAED6'>■</span> -5～0<br>" +
+    "<span style='color:#2171B5'>■</span> -15～-5<br>" +
+    "<span style='color:#084594'>■</span> -15以下";
+
+    return div;
+};
+
+legend.addTo(map);
 
 </script>
 
