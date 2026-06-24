@@ -179,37 +179,31 @@ alert(JSON.stringify(geoData.features[0].properties));
 
 function parseCSV(text,country){
 
-    const rows = text.trim().split("\n");
-
-    const header = rows[0]
+    const rows = text
         .replace(/\r/g,"")
-        .split(",");
+        .split("\n");
 
-    console.log("header:",header);
-    console.log("country:",country);
+    const header = rows[0].split(",");
 
     const idx = header.findIndex(
         h => h.trim() === country
     );
 
-    console.log("idx:",idx);
-
     const data = {};
 
     for(let i=1;i<rows.length;i++){
 
-        const cols = rows[i]
-            .replace(/\r/g,"")
-            .split(",");
+        const cols = rows[i].split(",");
 
         if(cols.length <= idx) continue;
 
-        data[cols[0].trim()] =
-            parseFloat(cols[idx]);
+        const pref = cols[0].trim();
+
+        data[pref] = Number(cols[idx]);
 
     }
 
-    console.log(data["北海道"]);
+    console.log(data);
 
     return data;
 }
