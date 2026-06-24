@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>差分分析</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+body{
+    font-family:sans-serif;
+    text-align:center;
+    background:#f5f5f5;
+}
+
+#controls{
+    margin:20px;
+}
+
+#map{
+    width:90%;
+    height:700px;
+    margin:auto;
+    border:1px solid #ccc;
+}
+</style>
+</head>
+
+<body>
+
+<h1>訪問率差分分析</h1>
+
+<div id="controls">
+
+<select id="country">
+    <option>韓国</option>
+    <option>台湾</option>
+    <option>香港</option>
+    <option>中国</option>
+</select>
+
+<select id="startYear">
+    <option>2015</option>
+    <option>2016</option>
+    <option>2017</option>
+    <option>2018</option>
+    <option>2019</option>
+    <option>2023</option>
+    <option>2024</option>
+    <option>2025</option>
+</select>
+
+<select id="endYear">
+    <option selected>2025</option>
+    <option>2024</option>
+    <option>2023</option>
+    <option>2019</option>
+    <option>2018</option>
+    <option>2017</option>
+    <option>2016</option>
+    <option>2015</option>
+</select>
+
+<button onclick="drawDiffMap()">
+表示
+</button>
+
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+const map = L.map('map').setView([37.5,137],5);
+
+L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+).addTo(map);
+
+let geoLayer;
+
+async function drawDiffMap(){
+
+    const country =
+        document.getElementById("country").value;
+
+    const startYear =
+        document.getElementById("startYear").value;
+
+    const endYear =
+        document.getElementById("endYear").value;
+
+    const startCsv =
+        await fetch(`${startYear}.csv`);
+
+    const endCsv =
+        await fetch(`${endYear}.csv`);
+
+    const startText =
+        await startCsv.text();
+
+    const endText =
+        await endCsv.text();
+
+    const startData =
+        parseCSV(startText,country);
+
+    const endData =
+        parseCSV(endText,country);
+
+    const geojson =
+        await fetch("japan.geojson");
+
+    const geoData =
+        await geojson.json();
+
+    geoData.features.forEach(feature=>{
+
+        const pref =
+            feature.properties.name;
+
+        const startVal =
+            startData[pref] || 0;
+
+        const endVal =
+            endData[pref] || 0;
+
+        feature.properties.diff =
+            endVal - startVal;
+
+    });
+
+    if(geoLayer){
+        map.removeLayer(geoLayer);
+    }
+
+    geoLayer = L.geoJSON(geoData,{
+        style:function(feature){
+
+            const v =
+                feature.properties.diff;
+
+            return {
+                fillColor:getColor(v),
+                weight:1,
+                color:"#555",
+                fillOpacity:0.8
+            };
+        },
+
+        onEachFeature:function(feature,layer){
+
+            layer.bindPopup(
+                feature.properties.name +
+                "<br>差分: " +
+                feature.properties.diff.toFixed(2)
+            );
+
+        }
+
+    }).addTo(map);
+
+}
+
+function parseCSV(text,country){
+
+    const rows =
+        text.split("\n");
+
+    const header =
+        rows[0].split(",");
+
+    const idx =
+        header.indexOf(country);
+
+    const data = {};
+
+    for(let i=1;i<rows.length;i++){
+
+        const cols =
+            rows[i].split(",");
+
+        if(cols.length<2) continue;
+
+        data[cols[0]] =
+            parseFloat(cols[idx]);
+
+    }
+
+    return data;
+}
+
+function getColor(v){
+
+    return v > 10 ? "#b2182b" :
+           v > 5  ? "#ef8a62" :
+           v > 0  ? "#fddbc7" :
+           v > -5 ? "#d1e5f0" :
+           v > -10? "#67a9cf" :
+                    "#2166ac";
+}
+
+</script>
+fetch("japan.geojson")
+  .then(res => res.json())
+  .then(data => {
+      console.log(data.features[0].properties);
+  });
+
+</body>
+</html>
