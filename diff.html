@@ -90,11 +90,11 @@ async function drawDiffMap(){
     const endYear =
         document.getElementById("endYear").value;
 
-    const startCsv =
-        await fetch(`${startYear}.csv`);
+   const startCsv =
+    await fetch(`${startYear}_clean.csv`);
 
-    const endCsv =
-        await fetch(`${endYear}.csv`);
+const endCsv =
+    await fetch(`${endYear}_clean.csv`);
 
     const startText =
         await startCsv.text();
