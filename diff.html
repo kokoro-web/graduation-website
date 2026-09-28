@@ -291,20 +291,34 @@ async function drawDiffMap(){
         await geojson.json();
 
 
+    /* =========================
+       都道府県名を照合
+       「京都府」と「京都」の
+       どちらにも対応
+    ========================= */
+
     geoData.features.forEach(feature=>{
 
-        const pref =
-            feature.properties.nam_ja
+        const prefOriginal =
+            feature.properties.nam_ja;
+
+        const prefShort =
+            prefOriginal
                 .replace("都","")
                 .replace("府","")
                 .replace("県","");
 
 
         const startVal =
-            startData[pref] || 0;
+            startData[prefOriginal] ??
+            startData[prefShort] ??
+            0;
+
 
         const endVal =
-            endData[pref] || 0;
+            endData[prefOriginal] ??
+            endData[prefShort] ??
+            0;
 
 
         feature.properties.startVal =
