@@ -1,251 +1,352 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<title>都道府県訪問率差分分析</title>
+<meta charset="UTF-8">
+<title>訪問率の差分地図</title>
 
-<link rel="stylesheet"
-href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 
 <style>
+    body {
+        margin: 0;
+        font-family: Arial, "Noto Sans JP", sans-serif;
+        background: #f2f2f2;
+        color: #333;
+    }
 
-body{
-margin:0;
-font-family:sans-serif;
-background:#f5f5f5;
-text-align:center;
-}
+    header {
+        background: #333;
+        color: white;
+        padding: 18px 30px;
+        font-size: 24px;
+        font-weight: bold;
+    }
 
-.back-button{
-position:absolute;
-top:15px;
-left:15px;
-padding:8px 15px;
-background:#999;
-color:white;
-text-decoration:none;
-border-radius:5px;
-}
+    .container {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
 
-header{
-background:#333;
-color:white;
-padding:30px;
-}
+    .controls {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
 
-h1{
-    margin-top:30px;
-}
+    .controls label {
+        font-weight: bold;
+        margin-right: 8px;
+    }
 
-.description{
-    margin-bottom:20px;
-    color:#555;
-}
+    select {
+        padding: 8px 12px;
+        font-size: 16px;
+        margin-right: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: white;
+    }
 
-#controls{
-    margin:20px;
-}
+    button {
+        padding: 9px 18px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        background: #444;
+        color: white;
+        cursor: pointer;
+    }
 
-select,button{
-    padding:8px 12px;
-    font-size:15px;
-    margin:5px;
-}
+    button:hover {
+        background: #222;
+    }
 
-button{
-    background:#333;
-    color:white;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-}
+    #map {
+        height: 650px;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
 
-button:hover{
-    background:#555;
-}
+    .legend {
+        background: white;
+        padding: 12px 14px;
+        line-height: 20px;
+        color: #333;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+        border-radius: 5px;
+    }
 
-#resultTitle{
-    font-size:22px;
-    font-weight:bold;
-    margin:20px;
-}
+    .legend-title {
+        font-weight: bold;
+        margin-bottom: 6px;
+    }
 
-#map{
-    width:90%;
-    height:700px;
-    margin:auto;
-    background:white;
-    border:1px solid #ccc;
-}
+    .legend-item {
+        display: flex;
+        align-items: center;
+        margin: 3px 0;
+    }
 
-.legend{
-    background:white;
-    padding:10px;
-    border:1px solid #ccc;
-    line-height:1.7;
-    font-size:13px;
-}
+    .legend-color {
+        width: 22px;
+        height: 18px;
+        margin-right: 7px;
+        border: 1px solid #999;
+    }
 
+    .back-top {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: #444;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        z-index: 9999;
+    }
+
+    .back-top:hover {
+        background: #222;
+    }
+
+    .error {
+        background: #ffe5e5;
+        color: #b00000;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: none;
+    }
 </style>
-
 </head>
 
 <body>
 
-<a href="index.html" class="back-button">
-← トップ
-</a>
-
 <header>
-<h1>差分分析</h1>
-<p>任意の2年間を比較し、都道府県訪問率の増減を可視化</p>
+    訪問率の差分地図
 </header>
 
-<div class="control-box">
+<div class="container">
 
-<h1>都道府県訪問率差分分析</h1>
+    <div class="controls">
 
-<p class="description">
-開始年と終了年を選択し、
-国籍別の都道府県訪問率の変化を可視化します。
-</p>
+        <label for="country">国籍：</label>
+        <select id="country">
+            <option value="韓国">韓国</option>
+            <option value="台湾">台湾</option>
+            <option value="香港">香港</option>
+            <option value="中国">中国</option>
+            <option value="タイ">タイ</option>
+            <option value="シンガポール">シンガポール</option>
+            <option value="マレーシア">マレーシア</option>
+            <option value="インドネシア">インドネシア</option>
+            <option value="フィリピン">フィリピン</option>
+            <option value="ベトナム">ベトナム</option>
+            <option value="インド">インド</option>
+            <option value="英国">英国</option>
+            <option value="ドイツ">ドイツ</option>
+            <option value="フランス">フランス</option>
+            <option value="イタリア">イタリア</option>
+            <option value="スペイン">スペイン</option>
+            <option value="ロシア">ロシア</option>
+            <option value="米国">米国</option>
+            <option value="カナダ">カナダ</option>
+            <option value="オーストラリア">オーストラリア</option>
+        </select>
 
-<div id="controls">
+        <label for="startYear">開始年：</label>
+        <select id="startYear"></select>
 
-<select id="country">
+        <label for="endYear">終了年：</label>
+        <select id="endYear"></select>
 
-<option>韓国</option>
-<option>台湾</option>
-<option>香港</option>
-<option>中国</option>
-<option>タイ</option>
-<option>シンガポール</option>
-<option>マレーシア</option>
-<option>インドネシア</option>
-<option>フィリピン</option>
-<option>ベトナム</option>
-<option>インド</option>
-<option>英国</option>
-<option>ドイツ</option>
-<option>フランス</option>
-<option>イタリア</option>
-<option>スペイン</option>
-<option>ロシア</option>
-<option>米国</option>
-<option>カナダ</option>
-<option>オーストラリア</option>
+        <button onclick="drawDiffMap()">差分を表示</button>
 
-</select>
+    </div>
 
-<select id="startYear">
+    <div id="error" class="error"></div>
 
-<option>2015</option>
-<option>2016</option>
-<option>2017</option>
-<option>2018</option>
-<option>2019</option>
-<option>2023</option>
-<option>2024</option>
-<option>2025</option>
+    <div id="map"></div>
 
-</select>
+</div>
 
-<select id="endYear">
-
-<option>2015</option>
-<option>2016</option>
-<option>2017</option>
-<option>2018</option>
-<option>2019</option>
-<option>2023</option>
-<option>2024</option>
-<option selected>2025</option>
-
-</select>
-
-<button onclick="drawDiffMap()">
-表示
+<button class="back-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+    ↑
 </button>
 
-</div>
-
-<div id="resultTitle">
-比較条件を選択してください
-</div>
-
-<div id="map"></div>
-
-</div>
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 
-const map = L.map('map',{
-    zoomControl:true
-}).setView([37.5,137],5);
+const years = [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2023,
+    2024,
+    2025
+];
 
-let geoLayer;
+const startSelect = document.getElementById("startYear");
+const endSelect = document.getElementById("endYear");
+
+years.forEach(year => {
+
+    const option1 = document.createElement("option");
+    option1.value = year;
+    option1.textContent = year;
+
+    const option2 = document.createElement("option");
+    option2.value = year;
+    option2.textContent = year;
+
+    startSelect.appendChild(option1);
+    endSelect.appendChild(option2);
+
+});
+
+startSelect.value = 2015;
+endSelect.value = 2025;
 
 
-/* =========================
-   CSV読み込み
-========================= */
+// ----------------------------------------
+// 都道府県名を統一する
+// ----------------------------------------
 
-function parseCSV(text,country){
+function normalizePrefName(name) {
+
+    return String(name)
+        .replace(/^\uFEFF/, "")
+        .replace(/["']/g, "")
+        .replace(/\s+/g, "")
+        .replace(/　/g, "")
+        .replace(/[都府県]$/, "")
+        .trim();
+
+}
+
+
+// ----------------------------------------
+// CSVを読み込む
+// ----------------------------------------
+
+function parseCSV(text, country) {
 
     const rows = text
-        .replace(/\r/g,"")
-        .split("\n");
+        .replace(/\r/g, "")
+        .split("\n")
+        .filter(row => row.trim() !== "");
 
-    const header = rows[0].split(",");
+    const header = rows[0]
+        .split(",")
+        .map(h =>
+            h
+                .replace(/^\uFEFF/, "")
+                .replace(/["']/g, "")
+                .trim()
+        );
 
     const idx = header.findIndex(
-        h => h.trim() === country
+        h => h === country
     );
 
     const data = {};
 
-    for(let i=1;i<rows.length;i++){
+    if (idx === -1) {
+        console.error(
+            "国籍の列が見つかりません：",
+            country
+        );
+        return data;
+    }
+
+    for (let i = 1; i < rows.length; i++) {
 
         const cols = rows[i].split(",");
 
-        if(cols.length <= idx) continue;
+        if (cols.length <= idx) {
+            continue;
+        }
 
-        const pref = cols[0]
-            .replace(/^\uFEFF/,"")
-            .trim();
+        const pref = normalizePrefName(cols[0]);
 
-        data[pref] =
-            Number(cols[idx]);
+        const value = Number(
+            cols[idx]
+                .replace(/"/g, "")
+                .trim()
+        );
 
+        if (pref !== "") {
+            data[pref] = value;
+        }
     }
 
     return data;
 }
 
 
-/* =========================
-   差分の色分け
-   -10 ～ +10を基準
-========================= */
+// ----------------------------------------
+// 差分の色
+// ----------------------------------------
 
-function getColor(v){
+function getColor(v) {
 
-    return v >= 10 ? "#800026" :
-           v >= 5  ? "#E31A1C" :
-           v >= 0  ? "#FC8D59" :
-           v >= -5 ? "#91BFDB" :
-           v >= -10? "#4575B4" :
-                     "#313695";
+    if (v >= 10) {
+        return "#800026";
+    }
+
+    if (v >= 5) {
+        return "#E31A1C";
+    }
+
+    if (v >= 0) {
+        return "#FC8D59";
+    }
+
+    if (v >= -5) {
+        return "#91BFDB";
+    }
+
+    if (v >= -10) {
+        return "#4575B4";
+    }
+
+    return "#313695";
 }
 
 
-/* =========================
-   差分地図
-========================= */
+// ----------------------------------------
+// 地図
+// ----------------------------------------
 
-async function drawDiffMap(){
+let map = L.map("map", {
+    zoomControl: true
+}).setView([36.2, 138.2], 5);
+
+let geojsonLayer = null;
+
+
+// ----------------------------------------
+// 差分地図を描画
+// ----------------------------------------
+
+async function drawDiffMap() {
 
     const country =
         document.getElementById("country").value;
@@ -256,192 +357,311 @@ async function drawDiffMap(){
     const endYear =
         document.getElementById("endYear").value;
 
+    const errorBox =
+        document.getElementById("error");
 
-    document.getElementById("resultTitle").innerHTML =
-        country + "　" +
-        startYear + " → " +
-        endYear + " 差分分析";
-
-
-    const startCsv =
-        await fetch(`${startYear}_clean.csv`);
-
-    const endCsv =
-        await fetch(`${endYear}_clean.csv`);
+    errorBox.style.display = "none";
+    errorBox.textContent = "";
 
 
-    const startText =
-        await startCsv.text();
+    try {
 
-    const endText =
-        await endCsv.text();
+        // CSV読み込み
 
+        const startResponse =
+            await fetch(`${startYear}_clean.csv`);
 
-    const startData =
-        parseCSV(startText,country);
+        const endResponse =
+            await fetch(`${endYear}_clean.csv`);
 
-    const endData =
-        parseCSV(endText,country);
-
-
-    const geojson =
-        await fetch("japan.geojson");
-
-    const geoData =
-        await geojson.json();
+        const geoResponse =
+            await fetch("japan.geojson");
 
 
-    /* =========================
-       都道府県名を照合
-       「京都府」と「京都」の
-       どちらにも対応
-    ========================= */
-
-    geoData.features.forEach(feature=>{
-
-        const prefOriginal =
-            feature.properties.nam_ja;
-
-        const prefShort =
-            prefOriginal
-                .replace("都","")
-                .replace("府","")
-                .replace("県","");
-
-
-        const startVal =
-            startData[prefOriginal] ??
-            startData[prefShort] ??
-            0;
-
-
-        const endVal =
-            endData[prefOriginal] ??
-            endData[prefShort] ??
-            0;
-
-
-        feature.properties.startVal =
-            startVal;
-
-        feature.properties.endVal =
-            endVal;
-
-        feature.properties.diff =
-            endVal - startVal;
-
-    });
-
-
-    if(geoLayer){
-        map.removeLayer(geoLayer);
-    }
-
-
-    geoLayer = L.geoJSON(geoData,{
-
-        style:function(feature){
-
-            return{
-
-                fillColor:
-                    getColor(
-                        feature.properties.diff
-                    ),
-
-                weight:1,
-
-                color:"#444",
-
-                fillOpacity:0.8
-
-            };
-
-        },
-
-
-        onEachFeature:function(feature,layer){
-
-            const diff =
-                feature.properties.diff;
-
-
-            const sign =
-                diff > 0 ? "+" : "";
-
-
-            layer.bindPopup(
-
-                "<b>" +
-                feature.properties.nam_ja +
-                "</b><br><br>" +
-
-                startYear + "年 : " +
-                feature.properties.startVal.toFixed(1) +
-                "%<br>" +
-
-                endYear + "年 : " +
-                feature.properties.endVal.toFixed(1) +
-                "%<br><br>" +
-
-                "差分 : " +
-                sign +
-                diff.toFixed(1) +
-                "%"
-
+        if (!startResponse.ok) {
+            throw new Error(
+                `${startYear}_clean.csv が読み込めません`
             );
-
         }
 
-    }).addTo(map);
-
-
-    map.fitBounds(
-        geoLayer.getBounds()
-    );
-
-
-    /* =========================
-       凡例
-    ========================= */
-
-    const legend =
-        L.control({position:"bottomright"});
-
-
-    legend.onAdd = function(){
-
-        const div =
-            L.DomUtil.create(
-                "div",
-                "legend"
+        if (!endResponse.ok) {
+            throw new Error(
+                `${endYear}_clean.csv が読み込めません`
             );
+        }
+
+        if (!geoResponse.ok) {
+            throw new Error(
+                "japan.geojson が読み込めません"
+            );
+        }
 
 
-        div.innerHTML =
-            "<b>差分（％）</b><br>" +
+        const startText =
+            await startResponse.text();
 
-            "<span style='color:#800026'>■</span> ＋10以上<br>" +
+        const endText =
+            await endResponse.text();
 
-            "<span style='color:#E31A1C'>■</span> ＋5～＋10<br>" +
-
-            "<span style='color:#FC8D59'>■</span> 0～＋5<br>" +
-
-            "<span style='color:#91BFDB'>■</span> −5～0<br>" +
-
-            "<span style='color:#4575B4'>■</span> −10～−5<br>" +
-
-            "<span style='color:#313695'>■</span> −10以下";
+        const geoData =
+            await geoResponse.json();
 
 
-        return div;
+        // CSVをデータ化
 
-    };
+        const startData =
+            parseCSV(startText, country);
+
+        const endData =
+            parseCSV(endText, country);
 
 
-    legend.addTo(map);
+        console.log(
+            `${startYear} ${country}`,
+            startData
+        );
+
+        console.log(
+            `${endYear} ${country}`,
+            endData
+        );
+
+
+        // 以前のレイヤーを削除
+
+        if (geojsonLayer) {
+            geojsonLayer.remove();
+        }
+
+
+        // GeoJSON
+
+        geojsonLayer = L.geoJSON(
+            geoData,
+            {
+
+                style: function(feature) {
+
+                    const prefOriginal =
+                        feature.properties.nam_ja;
+
+                    // ★ここが今回の修正ポイント
+                    // 「都・府・県」を文字列の最後から1文字だけ削除
+                    //
+                    // 京都府 → 京都
+                    // 大阪府 → 大阪
+                    // 東京都 → 東京
+                    // 神奈川県 → 神奈川
+
+                    const prefShort =
+                        prefOriginal.replace(
+                            /[都府県]$/,
+                            ""
+                        );
+
+
+                    const startVal =
+                        startData[prefOriginal] ??
+                        startData[prefShort] ??
+                        0;
+
+                    const endVal =
+                        endData[prefOriginal] ??
+                        endData[prefShort] ??
+                        0;
+
+                    const diff =
+                        endVal - startVal;
+
+
+                    return {
+
+                        fillColor:
+                            getColor(diff),
+
+                        weight: 1,
+
+                        color: "#666",
+
+                        fillOpacity: 0.75
+
+                    };
+
+                },
+
+
+                onEachFeature:
+                    function(feature, layer) {
+
+                        const prefOriginal =
+                            feature.properties.nam_ja;
+
+                        // ★最後の「都・府・県」だけ削除
+
+                        const prefShort =
+                            prefOriginal.replace(
+                                /[都府県]$/,
+                                ""
+                            );
+
+
+                        const startVal =
+                            startData[prefOriginal] ??
+                            startData[prefShort] ??
+                            0;
+
+                        const endVal =
+                            endData[prefOriginal] ??
+                            endData[prefShort] ??
+                            0;
+
+                        const diff =
+                            endVal - startVal;
+
+
+                        layer.bindPopup(`
+
+                            <div style="font-size:14px;">
+
+                                <strong>
+                                    ${prefShort}
+                                </strong>
+
+                                <hr>
+
+                                ${startYear}年：
+                                ${startVal.toFixed(1)}%
+
+                                <br>
+
+                                ${endYear}年：
+                                ${endVal.toFixed(1)}%
+
+                                <br>
+
+                                <strong>
+                                    差分：
+                                    ${diff >= 0 ? "+" : ""}
+                                    ${diff.toFixed(1)}%
+                                </strong>
+
+                            </div>
+
+                        `);
+
+                    }
+
+            }
+
+        ).addTo(map);
+
+
+        // 日本全体が画面に入るようにする
+
+        map.fitBounds(
+            geojsonLayer.getBounds()
+        );
+
+
+        // 凡例
+
+        const legend =
+            L.control({
+                position: "bottomright"
+            });
+
+
+        legend.onAdd = function() {
+
+            const div =
+                L.DomUtil.create(
+                    "div",
+                    "legend"
+                );
+
+            div.innerHTML = `
+
+                <div class="legend-title">
+                    差分（${endYear}年 − ${startYear}年）
+                </div>
+
+                <div class="legend-item">
+                    <div
+                        class="legend-color"
+                        style="background:#800026">
+                    </div>
+                    ＋10以上
+                </div>
+
+                <div class="legend-item">
+                    <div
+                        class="legend-color"
+                        style="background:#E31A1C">
+                    </div>
+                    ＋5～＋10
+                </div>
+
+                <div class="legend-item">
+                    <div
+                        class="legend-color"
+                        style="background:#FC8D59">
+                    </div>
+                    0～＋5
+                </div>
+
+                <div class="legend-item">
+                    <div
+                        class="legend-color"
+                        style="background:#91BFDB">
+                    </div>
+                    −5～0
+                </div>
+
+                <div class="legend-item">
+                    <div
+                        class="legend-color"
+                        style="background:#4575B4">
+                    </div>
+                    −10～−5
+                </div>
+
+                <div class="legend-item">
+                    <div
+                        class="legend-color"
+                        style="background:#313695">
+                    </div>
+                    −10以下
+                </div>
+
+            `;
+
+            return div;
+        };
+
+
+        legend.addTo(map);
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        errorBox.textContent =
+            "データの読み込み中にエラーが発生しました。";
+
+        errorBox.style.display = "block";
+
+    }
 
 }
+
+
+// ----------------------------------------
+// 最初に表示
+// ----------------------------------------
+
+drawDiffMap();
 
 </script>
 
