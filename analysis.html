@@ -1,80 +1,10 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 
 <head>
+
 <meta charset="UTF-8">
-<title>訪問率分析</title>
 
-<style>
-
-body{
-    font-family:sans-serif;
-    text-align:center;
-    margin:0;
-    background:#f5f5f5;
-}
-
-.back-button{
-    position:absolute;
-    top:15px;
-    left:15px;
-    padding:8px 15px;
-    background:#999;
-    color:white;
-    text-decoration:none;
-    border-radius:5px;
-}
-
-header{
-    background:#333;
-    color:white;
-    padding:30px;
-}
-
-.control-box{
-    margin:30px auto;
-    background:white;
-    width:80%;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
-
-select{
-    padding:8px;
-    font-size:16px;
-    margin:10px;
-}
-
-iframe{
-    width:95%;
-    height:650px;
-    border:none;
-    background:white;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<a href="index.html" class="back-button">← トップ</a>
-
-<header>
-<h1>訪問率分析</h1>
-<p>国と年度を選択して都道府県別訪問率を表示</p>
-</header>
-
-<div class="control-box">
-
-<!DOCTYPE html>
-
-<html lang="ja">
-
-<head>
-<meta charset="UTF-8">
 <title>訪問率比較分析</title>
 
 <style>
@@ -123,7 +53,7 @@ select{
     justify-content:center;
     gap:20px;
     width:95%;
-    margin:auto;
+    margin:30px auto;
 }
 
 .map-box{
@@ -143,20 +73,88 @@ iframe{
     margin-bottom:10px;
 }
 
+.legend{
+    width:800px;
+    margin:20px auto;
+    background:white;
+    border:1px solid black;
+    font-size:14px;
+    padding:10px;
+    text-align:center;
+    box-sizing:border-box;
+}
+
+.explanation{
+    width:80%;
+    margin:40px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.explanation h2{
+    margin-top:0;
+}
+
+.explanation p{
+    color:#555;
+    line-height:1.8;
+}
+
+.analysis-link{
+    display:inline-block;
+    margin:20px;
+    padding:10px 20px;
+    background:#333;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+}
+
+.analysis-link:hover{
+    background:#555;
+}
+
 </style>
 
 </head>
 
+
 <body>
 
-<a href="index.html" class="back-button">← トップ</a>
+
+<a href="index.html" class="back-button">
+← トップ
+</a>
+
 
 <header>
+
 <h1>訪問率比較分析</h1>
-<p>国と年度を選択して比較</p>
+
+<p>
+国と年度を選択して都道府県別訪問率を比較
+</p>
+
 </header>
 
+
 <div class="control-box">
+
+
+<h1>都道府県訪問率比較分析</h1>
+
+
+<p>
+国籍と比較する年度を選択し、
+都道府県別の訪問率を比較します。
+</p>
+
+
+<!-- 国籍選択 -->
+
+<div>
 
 <label>国：</label>
 
@@ -185,7 +183,12 @@ iframe{
 
 </select>
 
-<br>
+</div>
+
+
+<!-- 年度選択 -->
+
+<div>
 
 <label>比較年①：</label>
 
@@ -202,11 +205,12 @@ iframe{
 
 </select>
 
+
 <label>比較年②：</label>
 
 <select id="year2" onchange="changeMaps()">
 
-<option value="2025">2025</option>
+<option value="2025" selected>2025</option>
 <option value="2024">2024</option>
 <option value="2023">2023</option>
 <option value="2019">2019</option>
@@ -218,39 +222,42 @@ iframe{
 </select>
 
 </div>
-<!-- 横長凡例 -->
-<div style="
-width:800px;
-margin:10px auto;
-background:white;
-border:1px solid black;
-font-size:14px;
-padding:10px;
-text-align:center;
-">
+
+
+<!-- 凡例 -->
+
+<div class="legend">
 
 <b>訪問率：</b>
 
-<span style="background:#e5ffe5;color:black;">■</span> 0〜2%
+<span style="color:#e5ffe5">■</span> 0〜2%
 
-<span style="background:#b3ffb3;color:black;">■</span> 3〜5%
+<span style="color:#b3ffb3">■</span> 3〜5%
 
-<span style="background:#ffff66;color:black;">■</span> 6〜10%
+<span style="color:#ffff66">■</span> 6〜10%
 
-<span style="background:#ffcc66;color:black;">■</span> 11〜20%
+<span style="color:#ffcc66">■</span> 11〜20%
 
-<span style="background:#ff6666;color:black;">■</span> 21〜30%
+<span style="color:#ff6666">■</span> 21〜30%
 
-<span style="background:#cc0000;color:black;">■</span> 31〜50%
+<span style="color:#cc0000">■</span> 31〜50%
 
-<span style="background:#660099;color:black;">■</span> 51%以上
+<span style="color:#660099">■</span> 51%以上
 
 </div>
 
+
 <p style="font-size:12px;color:#666;">
-色が濃いほど訪問率が高いことを示す
+
+色が濃いほど訪問率が高いことを示します。
+
 </p>
+
+
+<!-- 地図 -->
+
 <div class="map-row">
+
 
 <div class="map-box">
 
@@ -265,6 +272,7 @@ src="韓国_2015.html">
 
 </div>
 
+
 <div class="map-box">
 
 <div class="map-title" id="title2">
@@ -278,36 +286,35 @@ src="韓国_2025.html">
 
 </div>
 
+
 </div>
 
-<script>
 
-function changeMaps(){
+</div>
 
-    let country =
-        document.getElementById("country").value;
 
-    let year1 =
-        document.getElementById("year1").value;
+<!-- 説明 -->
 
-    let year2 =
-        document.getElementById("year2").value;
+<div class="explanation">
 
-    document.getElementById("map1").src =
-        country + "_" + year1 + ".html";
+<h2>訪問率の見方</h2>
 
-    document.getElementById("map2").src =
-        country + "_" + year2 + ".html";
+<p>
+訪問率は、各国籍の訪日外国人のうち、
+それぞれの都道府県を訪問した人の割合を示しています。
+</p>
 
-    document.getElementById("title1").innerHTML =
-        year1 + "年";
+<p>
+地図上の色が濃いほど、
+その国籍の訪日外国人による訪問率が高いことを示します。
+</p>
 
-    document.getElementById("title2").innerHTML =
-        year2 + "年";
-}
+</div>
 
-</script>
-<hr style="margin:50px 0;">
+
+<!-- 差分分析へのリンク -->
+
+<div class="explanation">
 
 <h2>差分分析</h2>
 
@@ -316,10 +323,51 @@ function changeMaps(){
 都道府県訪問率の増減を可視化できます。
 </p>
 
-<a href="diff.html" class="button">
+<a href="diff.html" class="analysis-link">
 差分分析を見る
 </a>
-    
-</body>
-</html>
 
+</div>
+
+
+<script>
+
+
+function changeMaps(){
+
+    const country =
+        document.getElementById("country").value;
+
+
+    const year1 =
+        document.getElementById("year1").value;
+
+
+    const year2 =
+        document.getElementById("year2").value;
+
+
+    document.getElementById("map1").src =
+        country + "_" + year1 + ".html";
+
+
+    document.getElementById("map2").src =
+        country + "_" + year2 + ".html";
+
+
+    document.getElementById("title1").innerHTML =
+        year1 + "年";
+
+
+    document.getElementById("title2").innerHTML =
+        year2 + "年";
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
