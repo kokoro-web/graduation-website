@@ -32,14 +32,6 @@ background:#333;
 color:white;
 padding:30px;
 }
-.control-box{
-    width:85%;
-    margin:20px auto;
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
 
 h1{
     margin-top:30px;
@@ -99,7 +91,8 @@ button:hover{
 </head>
 
 <body>
-    <a href="index.html" class="back-button">
+
+<a href="index.html" class="back-button">
 ← トップ
 </a>
 
@@ -182,6 +175,8 @@ button:hover{
 
 <div id="map"></div>
 
+</div>
+
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
@@ -191,6 +186,11 @@ const map = L.map('map',{
 }).setView([37.5,137],5);
 
 let geoLayer;
+
+
+/* =========================
+   CSV読み込み
+========================= */
 
 function parseCSV(text,country){
 
@@ -224,18 +224,26 @@ function parseCSV(text,country){
     return data;
 }
 
+
+/* =========================
+   差分の色分け
+   -10 ～ +10を基準
+========================= */
+
 function getColor(v){
 
-    return v >= 20 ? "#800026" :
-           v >= 15 ? "#BD0026" :
-           v >= 10 ? "#E31A1C" :
-           v >= 5  ? "#FC4E2A" :
-           v >= 0  ? "#FD8D3C" :
-           v >= -5 ? "#6BAED6" :
-           v >= -10? "#4292C6" :
-           v >= -15? "#2171B5" :
-                     "#084594";
+    return v >= 10 ? "#800026" :
+           v >= 5  ? "#E31A1C" :
+           v >= 0  ? "#FC8D59" :
+           v >= -5 ? "#91BFDB" :
+           v >= -10? "#4575B4" :
+                     "#313695";
 }
+
+
+/* =========================
+   差分地図
+========================= */
 
 async function drawDiffMap(){
 
@@ -248,10 +256,12 @@ async function drawDiffMap(){
     const endYear =
         document.getElementById("endYear").value;
 
+
     document.getElementById("resultTitle").innerHTML =
         country + "　" +
         startYear + " → " +
         endYear + " 差分分析";
+
 
     const startCsv =
         await fetch(`${startYear}_clean.csv`);
@@ -259,11 +269,13 @@ async function drawDiffMap(){
     const endCsv =
         await fetch(`${endYear}_clean.csv`);
 
+
     const startText =
         await startCsv.text();
 
     const endText =
         await endCsv.text();
+
 
     const startData =
         parseCSV(startText,country);
@@ -271,11 +283,13 @@ async function drawDiffMap(){
     const endData =
         parseCSV(endText,country);
 
+
     const geojson =
         await fetch("japan.geojson");
 
     const geoData =
         await geojson.json();
+
 
     geoData.features.forEach(feature=>{
 
@@ -285,111 +299,136 @@ async function drawDiffMap(){
                 .replace("府","")
                 .replace("県","");
 
+
         const startVal =
             startData[pref] || 0;
 
         const endVal =
             endData[pref] || 0;
 
-        feature.properties.startVal = startVal;
-feature.properties.endVal = endVal;
-feature.properties.diff = endVal - startVal;
+
+        feature.properties.startVal =
+            startVal;
+
+        feature.properties.endVal =
+            endVal;
+
+        feature.properties.diff =
+            endVal - startVal;
 
     });
+
 
     if(geoLayer){
         map.removeLayer(geoLayer);
     }
+
 
     geoLayer = L.geoJSON(geoData,{
 
         style:function(feature){
 
             return{
+
                 fillColor:
                     getColor(
                         feature.properties.diff
                     ),
+
                 weight:1,
+
                 color:"#444",
+
                 fillOpacity:0.8
+
             };
+
         },
+
 
         onEachFeature:function(feature,layer){
 
+            const diff =
+                feature.properties.diff;
 
-const diff =
-    feature.properties.diff;
 
-const sign =
-    diff > 0 ? "+" : "";
+            const sign =
+                diff > 0 ? "+" : "";
 
-layer.bindPopup(
 
-    "<b>" +
-    feature.properties.nam_ja +
-    "</b><br><br>" +
+            layer.bindPopup(
 
-    startYear + "年 : " +
-    feature.properties.startVal.toFixed(1) +
-    "%<br>" +
+                "<b>" +
+                feature.properties.nam_ja +
+                "</b><br><br>" +
 
-    endYear + "年 : " +
-    feature.properties.endVal.toFixed(1) +
-    "%<br><br>" +
+                startYear + "年 : " +
+                feature.properties.startVal.toFixed(1) +
+                "%<br>" +
 
-    "差分 : " +
-    sign +
-    diff.toFixed(1) +
-    "%"
+                endYear + "年 : " +
+                feature.properties.endVal.toFixed(1) +
+                "%<br><br>" +
 
-);
+                "差分 : " +
+                sign +
+                diff.toFixed(1) +
+                "%"
 
+            );
+
+        }
+
+    }).addTo(map);
+
+
+    map.fitBounds(
+        geoLayer.getBounds()
+    );
+
+
+    /* =========================
+       凡例
+    ========================= */
+
+    const legend =
+        L.control({position:"bottomright"});
+
+
+    legend.onAdd = function(){
+
+        const div =
+            L.DomUtil.create(
+                "div",
+                "legend"
+            );
+
+
+        div.innerHTML =
+            "<b>差分（％）</b><br>" +
+
+            "<span style='color:#800026'>■</span> ＋10以上<br>" +
+
+            "<span style='color:#E31A1C'>■</span> ＋5～＋10<br>" +
+
+            "<span style='color:#FC8D59'>■</span> 0～＋5<br>" +
+
+            "<span style='color:#91BFDB'>■</span> −5～0<br>" +
+
+            "<span style='color:#4575B4'>■</span> −10～−5<br>" +
+
+            "<span style='color:#313695'>■</span> −10以下";
+
+
+        return div;
+
+    };
+
+
+    legend.addTo(map);
 
 }
 
-
-}).addTo(map);
-
-map.fitBounds(
-    geoLayer.getBounds()
-);
-
-
-}
-
-const legend =
-    L.control({
-        position:'bottomright'
-    });
-
-legend.onAdd = function(){
-
-    const div =
-        L.DomUtil.create(
-            'div',
-            'legend'
-        );
-
-    div.innerHTML =
-
-    "<b>差分 (%)</b><br>" +
-
-    "<span style='color:#800026'>■</span> +20以上<br>" +
-    "<span style='color:#E31A1C'>■</span> +10～20<br>" +
-    "<span style='color:#FD8D3C'>■</span> 0～10<br>" +
-
-    "<span style='color:#6BAED6'>■</span> -5～0<br>" +
-    "<span style='color:#2171B5'>■</span> -15～-5<br>" +
-    "<span style='color:#084594'>■</span> -15以下";
-
-    return div;
-};
-
-legend.addTo(map);
-
-    
 </script>
 
 </body>
