@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-<meta charset="utf-8">
-<title>都道府県訪問率差分分析</title>
+
+<meta charset="UTF-8">
+
+<title>差分分析</title>
 
 <link rel="stylesheet"
 href="https://unpkg.com/leaflet/dist/leaflet.css"/>
@@ -10,49 +13,48 @@ href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 <style>
 
 body{
-margin:0;
-font-family:sans-serif;
-background:#f5f5f5;
-text-align:center;
+    font-family:sans-serif;
+    margin:0;
+    text-align:center;
+    background:#f5f5f5;
 }
 
 .back-button{
-position:absolute;
-top:15px;
-left:15px;
-padding:8px 15px;
-background:#999;
-color:white;
-text-decoration:none;
-border-radius:5px;
+    position:absolute;
+    top:15px;
+    left:15px;
+    padding:8px 15px;
+    background:#999;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
 }
 
 header{
-background:#333;
-color:white;
-padding:30px;
+    background:#333;
+    color:white;
+    padding:30px;
 }
 
-h1{
-    margin-top:30px;
+.control-box{
+    width:90%;
+    margin:20px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
 
-.description{
-    margin-bottom:20px;
-    color:#555;
-}
-
-#controls{
-    margin:20px;
-}
-
-select,button{
-    padding:8px 12px;
-    font-size:15px;
-    margin:5px;
+select{
+    padding:8px;
+    margin:10px;
+    font-size:16px;
 }
 
 button{
+    padding:8px 15px;
+    margin:10px;
+    font-size:16px;
     background:#333;
     color:white;
     border:none;
@@ -67,50 +69,100 @@ button:hover{
 #resultTitle{
     font-size:22px;
     font-weight:bold;
-    margin:20px;
+    margin:25px;
 }
 
 #map{
-    width:90%;
-    height:700px;
-    margin:auto;
+    width:95%;
+    height:650px;
+    margin:20px auto;
+    border:none;
     background:white;
-    border:1px solid #ccc;
 }
 
 .legend{
+    width:800px;
+    margin:20px auto;
     background:white;
+    border:1px solid black;
+    font-size:14px;
     padding:10px;
-    border:1px solid #ccc;
-    line-height:1.7;
-    font-size:13px;
+    text-align:center;
+    box-sizing:border-box;
+}
+
+.explanation{
+    width:80%;
+    margin:40px auto;
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.explanation h2{
+    margin-top:0;
+}
+
+.explanation p{
+    color:#555;
+    line-height:1.8;
+}
+
+.analysis-link{
+    display:inline-block;
+    margin:20px;
+    padding:10px 20px;
+    background:#333;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+}
+
+.analysis-link:hover{
+    background:#555;
 }
 
 </style>
 
 </head>
 
+
 <body>
 
-<a href="index.html" class="back-button">
-← トップ
+
+<a href="analysis.html" class="back-button">
+← 訪問率比較分析
 </a>
 
+
 <header>
+
 <h1>差分分析</h1>
-<p>任意の2年間を比較し、都道府県訪問率の増減を可視化</p>
+
+<p>
+任意の2年間を比較し、都道府県訪問率の増減を可視化
+</p>
+
 </header>
+
 
 <div class="control-box">
 
+
 <h1>都道府県訪問率差分分析</h1>
 
-<p class="description">
+
+<p>
 開始年と終了年を選択し、
 国籍別の都道府県訪問率の変化を可視化します。
 </p>
 
+
 <div id="controls">
+
+
+<label>国：</label>
 
 <select id="country">
 
@@ -137,53 +189,130 @@ button:hover{
 
 </select>
 
+
+<br>
+
+
+<label>開始年：</label>
+
 <select id="startYear">
 
-<option>2015</option>
-<option>2016</option>
-<option>2017</option>
-<option>2018</option>
-<option>2019</option>
-<option>2023</option>
-<option>2024</option>
-<option>2025</option>
+<option value="2015">2015</option>
+<option value="2016">2016</option>
+<option value="2017">2017</option>
+<option value="2018">2018</option>
+<option value="2019">2019</option>
+<option value="2023">2023</option>
+<option value="2024">2024</option>
+<option value="2025">2025</option>
 
 </select>
+
+
+<label>終了年：</label>
 
 <select id="endYear">
 
-<option>2015</option>
-<option>2016</option>
-<option>2017</option>
-<option>2018</option>
-<option>2019</option>
-<option>2023</option>
-<option>2024</option>
-<option selected>2025</option>
+<option value="2015">2015</option>
+<option value="2016">2016</option>
+<option value="2017">2017</option>
+<option value="2018">2018</option>
+<option value="2019">2019</option>
+<option value="2023">2023</option>
+<option value="2024">2024</option>
+<option value="2025" selected>2025</option>
 
 </select>
+
 
 <button onclick="drawDiffMap()">
 表示
 </button>
 
+
 </div>
+
 
 <div id="resultTitle">
 比較条件を選択してください
 </div>
 
+
+<!-- 差分地図 -->
+
 <div id="map"></div>
+
+
+<!-- 凡例 -->
+
+<div class="legend">
+
+<b>差分（％）：</b>
+
+<span style="color:#800026">■</span> ＋10以上　
+
+<span style="color:#E31A1C">■</span> ＋5～＋10　
+
+<span style="color:#FC8D59">■</span> 0～＋5　
+
+<span style="color:#91BFDB">■</span> −5～0　
+
+<span style="color:#4575B4">■</span> −10～−5　
+
+<span style="color:#313695">■</span> −10以下
 
 </div>
 
+
+<p style="font-size:12px;color:#666;">
+
+正の値は訪問率の増加、負の値は訪問率の減少を示します。
+
+</p>
+
+
+</div>
+
+
+<!-- 差分の説明 -->
+
+<div class="explanation">
+
+<h2>差分の見方</h2>
+
+<p>
+差分は「終了年の訪問率 − 開始年の訪問率」
+で算出しています。
+</p>
+
+<p>
+差分がプラスの場合は訪問率が増加し、
+マイナスの場合は訪問率が減少したことを示します。
+</p>
+
+<p>
+地図上の都道府県をクリックすると、
+開始年・終了年の訪問率と差分を確認できます。
+</p>
+
+</div>
+
+
+<a href="analysis.html" class="analysis-link">
+訪問率比較分析へ戻る
+</a>
+
+
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+
 <script>
+
 
 const map = L.map('map',{
     zoomControl:true
 }).setView([37.5,137],5);
+
 
 let geoLayer;
 
@@ -227,7 +356,6 @@ function parseCSV(text,country){
 
 /* =========================
    差分の色分け
-   -10 ～ +10を基準
 ========================= */
 
 function getColor(v){
@@ -238,6 +366,7 @@ function getColor(v){
            v >= -5 ? "#91BFDB" :
            v >= -10? "#4575B4" :
                      "#313695";
+
 }
 
 
@@ -250,8 +379,10 @@ async function drawDiffMap(){
     const country =
         document.getElementById("country").value;
 
+
     const startYear =
         document.getElementById("startYear").value;
+
 
     const endYear =
         document.getElementById("endYear").value;
@@ -266,12 +397,14 @@ async function drawDiffMap(){
     const startCsv =
         await fetch(`${startYear}_clean.csv`);
 
+
     const endCsv =
         await fetch(`${endYear}_clean.csv`);
 
 
     const startText =
         await startCsv.text();
+
 
     const endText =
         await endCsv.text();
@@ -280,6 +413,7 @@ async function drawDiffMap(){
     const startData =
         parseCSV(startText,country);
 
+
     const endData =
         parseCSV(endText,country);
 
@@ -287,29 +421,44 @@ async function drawDiffMap(){
     const geojson =
         await fetch("japan.geojson");
 
+
     const geoData =
         await geojson.json();
 
 
     geoData.features.forEach(feature=>{
 
+
+        /*
+         * 都道府県名の最後にある
+         * 「都」「府」「県」だけを削除
+         *
+         * 京都府 → 京都
+         * 大阪府 → 大阪
+         * 東京都 → 東京
+         * 神奈川県 → 神奈川
+         */
+
         const pref =
-    feature.properties.nam_ja
-        .replace(/[都府県]$/,"");
+            feature.properties.nam_ja
+                .replace(/[都府県]$/,"");
 
 
         const startVal =
-            startData[pref] || 0;
+            startData[pref] ?? 0;
+
 
         const endVal =
-            endData[pref] || 0;
+            endData[pref] ?? 0;
 
 
         feature.properties.startVal =
             startVal;
 
+
         feature.properties.endVal =
             endVal;
+
 
         feature.properties.diff =
             endVal - startVal;
@@ -318,7 +467,9 @@ async function drawDiffMap(){
 
 
     if(geoLayer){
+
         map.removeLayer(geoLayer);
+
     }
 
 
@@ -384,50 +535,12 @@ async function drawDiffMap(){
         geoLayer.getBounds()
     );
 
-
-    /* =========================
-       凡例
-    ========================= */
-
-    const legend =
-        L.control({position:"bottomright"});
-
-
-    legend.onAdd = function(){
-
-        const div =
-            L.DomUtil.create(
-                "div",
-                "legend"
-            );
-
-
-        div.innerHTML =
-            "<b>差分（％）</b><br>" +
-
-            "<span style='color:#800026'>■</span> ＋10以上<br>" +
-
-            "<span style='color:#E31A1C'>■</span> ＋5～＋10<br>" +
-
-            "<span style='color:#FC8D59'>■</span> 0～＋5<br>" +
-
-            "<span style='color:#91BFDB'>■</span> −5～0<br>" +
-
-            "<span style='color:#4575B4'>■</span> −10～−5<br>" +
-
-            "<span style='color:#313695'>■</span> −10以下";
-
-
-        return div;
-
-    };
-
-
-    legend.addTo(map);
-
 }
+
 
 </script>
 
+
 </body>
+
 </html>
