@@ -520,69 +520,160 @@ K-means法によるクラスタ分析を行った。
 
 /* --------------------------------
    アジア10市場
+   2015年 → 2025年の平均差分
 -------------------------------- */
 
-const asianCountries = [
-    "韓国",
-    "台湾",
-    "香港",
-    "中国",
-    "タイ",
-    "シンガポール",
-    "マレーシア",
-    "インドネシア",
-    "フィリピン",
-    "ベトナム"
+const chartData = [
+    {
+        prefecture: "千葉",
+        value: -6.37
+    },
+    {
+        prefecture: "東京",
+        value: -4.12
+    },
+    {
+        prefecture: "神奈川",
+        value: -3.19
+    },
+    {
+        prefecture: "山梨",
+        value: 5.20
+    },
+    {
+        prefecture: "京都",
+        value: 2.17
+    },
+    {
+        prefecture: "奈良",
+        value: 1.93
+    },
+    {
+        prefecture: "福岡",
+        value: 1.55
+    },
+    {
+        prefecture: "大阪",
+        value: 1.09
+    }
 ];
 
 
 /* --------------------------------
-   グラフに表示する都道府県
+   グラフ作成
 -------------------------------- */
 
-const targetPrefectures = [
-    "東京",
-    "千葉",
-    "神奈川",
-    "山梨",
-    "京都",
-    "奈良",
-    "大阪",
-    "福岡"
-];
+function createChart(){
 
+    const chartRows =
+        document.getElementById("chartRows");
 
-/* --------------------------------
-   CSV読み込み
--------------------------------- */
-
-async function loadCSV(url){
-
-    const response = await fetch(url);
-
-    if(!response.ok){
-        throw new Error("CSVの読み込みに失敗しました");
+    if(!chartRows){
+        return;
     }
 
-    const text = await response.text();
 
-    return parseCSV(text);
-}
+    /* 最大値 */
 
-
-/* --------------------------------
-   CSV簡易パーサー
--------------------------------- */
-
-function parseCSV(text){
-
-    const rows = text.trim().split(/\r?\n/);
-
-    return rows.map(row => {
-
-        return row.split(",").map(cell =>
-            cell.trim().replace(/^"|"$/g, "")
+    const maxValue =
+        Math.max(
+            ...chartData.map(item =>
+                Math.abs(item.value)
+            )
         );
+
+
+    chartData.forEach(item => {
+
+        const row =
+            document.createElement("div");
+
+        row.className = "bar-row";
+
+
+        /* 都道府県名 */
+
+        const label =
+            document.createElement("div");
+
+        label.className = "bar-label";
+
+        label.textContent =
+            item.prefecture;
+
+
+        /* 棒グラフ部分 */
+
+        const container =
+            document.createElement("div");
+
+        container.className =
+            "bar-container";
+
+
+        const bar =
+            document.createElement("div");
+
+
+        if(item.value >= 0){
+
+            bar.className =
+                "bar positive";
+
+        }else{
+
+            bar.className =
+                "bar negative";
+
+        }
+
+
+        /* 棒の長さ */
+
+        const width =
+            Math.abs(item.value)
+            / maxValue
+            * 50;
+
+
+        bar.style.width =
+            width + "%";
+
+
+        container.appendChild(bar);
+
+
+        /* 数値 */
+
+        const value =
+            document.createElement("div");
+
+        value.className =
+            "bar-value";
+
+
+        const sign =
+            item.value > 0
+                ? "+"
+                : "";
+
+
+        value.textContent =
+            sign +
+            item.value.toFixed(2) +
+            "pt";
+
+
+        /* 行に追加 */
+
+        row.appendChild(label);
+
+        row.appendChild(container);
+
+        row.appendChild(value);
+
+
+        chartRows.appendChild(row);
 
     });
 
@@ -590,207 +681,8 @@ function parseCSV(text){
 
 
 /* --------------------------------
-   平均差分を計算
+   実行
 -------------------------------- */
-
-async function createChart(){
-
-    try{
-
-        const data2015 = await loadCSV("clean_data/2015_clean.csv");
-        const data2025 = await loadCSV("clean_data/2025_clean.csv");
-
-
-        const header2015 = data2015[0];
-        const header2025 = data2025[0];
-
-
-        /* 都道府県 → 行データ */
-        const map2015 = {};
-        const map2025 = {};
-
-        for(let i = 1; i < data2015.length; i++){
-
-            const pref = data2015[i][0];
-
-            map2015[pref] = data2015[i];
-
-        }
-
-
-        for(let i = 1; i < data2025.length; i++){
-
-            const pref = data2025[i][0];
-
-            map2025[pref] = data2025[i];
-
-        }
-
-
-        const results = [];
-
-
-        /* 各都道府県について平均差分を計算 */
-
-        targetPrefectures.forEach(prefecture => {
-
-            let values = [];
-
-
-            asianCountries.forEach(country => {
-
-                const index2015 = header2015.indexOf(country);
-                const index2025 = header2025.indexOf(country);
-
-
-                if(
-                    index2015 === -1 ||
-                    index2025 === -1 ||
-                    !map2015[prefecture] ||
-                    !map2025[prefecture]
-                ){
-                    return;
-                }
-
-
-                const value2015 =
-                    parseFloat(map2015[prefecture][index2015]);
-
-                const value2025 =
-                    parseFloat(map2025[prefecture][index2025]);
-
-
-                if(
-                    !isNaN(value2015) &&
-                    !isNaN(value2025)
-                ){
-
-                    values.push(value2025 - value2015);
-
-                }
-
-            });
-
-
-            if(values.length > 0){
-
-                const average =
-                    values.reduce((a,b) => a+b,0)
-                    / values.length;
-
-
-                results.push({
-                    prefecture: prefecture,
-                    value: average
-                });
-
-            }
-
-        });
-
-
-        /* 絶対値最大を取得して棒の長さを調整 */
-
-        const maxValue =
-            Math.max(
-                ...results.map(item =>
-                    Math.abs(item.value)
-                )
-            );
-
-
-        const chartRows =
-            document.getElementById("chartRows");
-
-
-        results.forEach(item => {
-
-            const row =
-                document.createElement("div");
-
-            row.className = "bar-row";
-
-
-            const label =
-                document.createElement("div");
-
-            label.className = "bar-label";
-
-            label.textContent =
-                item.prefecture + "都道府県";
-
-
-            const container =
-                document.createElement("div");
-
-            container.className =
-                "bar-container";
-
-
-            const bar =
-                document.createElement("div");
-
-            bar.className =
-                "bar " +
-                (item.value >= 0
-                    ? "positive"
-                    : "negative");
-
-
-            const width =
-                Math.abs(item.value)
-                / maxValue
-                * 50;
-
-
-            bar.style.width =
-                width + "%";
-
-
-            const value =
-                document.createElement("div");
-
-            value.className =
-                "bar-value";
-
-
-            const sign =
-                item.value > 0 ? "+" : "";
-
-
-            value.textContent =
-                sign +
-                item.value.toFixed(2) +
-                "pt";
-
-
-            container.appendChild(bar);
-
-
-            row.appendChild(label);
-
-            row.appendChild(container);
-
-            row.appendChild(value);
-
-
-            chartRows.appendChild(row);
-
-        });
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-        document.getElementById("chartRows").innerHTML =
-            "<p>グラフデータを読み込めませんでした。</p>";
-
-    }
-
-}
-
 
 createChart();
 
