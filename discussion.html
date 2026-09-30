@@ -135,7 +135,13 @@ header p{
     position:absolute;
     top:0;
     bottom:0;
-    left:50%;
+
+    /*
+      グラフ全体ではなく、
+      棒グラフ部分（中央の列）の中央に0ラインを配置
+    */
+    left:calc(110px + (100% - 185px) / 2);
+
     width:1px;
     background:#777;
     z-index:1;
