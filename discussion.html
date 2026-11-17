@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 
 <head>
 <meta charset="UTF-8">
-<title>考察</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分析結果</title>
 
 <style>
 
@@ -80,7 +82,7 @@ header p{
     line-height:2;
 }
 
-/* 特徴ボックス */
+/* 結果ボックス */
 .feature-box{
     background:#f8f9fa;
     padding:18px;
@@ -88,19 +90,6 @@ header p{
     border-radius:5px;
     margin:20px 0;
     line-height:2;
-}
-
-/* 注目ポイント */
-.point-box{
-    background:#f8f9fa;
-    padding:20px;
-    border-radius:8px;
-    margin:20px 0;
-    line-height:2;
-}
-
-.point-box strong{
-    font-size:18px;
 }
 
 /* グラフ */
@@ -135,13 +124,7 @@ header p{
     position:absolute;
     top:0;
     bottom:0;
-
-    /*
-      グラフ全体ではなく、
-      棒グラフ部分（中央の列）の中央に0ラインを配置
-    */
     left:calc(110px + (100% - 185px) / 2);
-
     width:1px;
     background:#777;
     z-index:1;
@@ -190,6 +173,7 @@ header p{
     font-weight:bold;
 }
 
+/* グラフ注記 */
 .chart-note{
     margin-top:18px;
     font-size:13px;
@@ -224,15 +208,6 @@ header p{
 
 .legend-negative{
     background:#64a5d8;
-}
-
-/* 考察まとめ */
-.conclusion-box{
-    background:#f1f1f1;
-    padding:22px;
-    border-radius:8px;
-    line-height:2;
-    margin-top:20px;
 }
 
 /* フッター */
@@ -271,33 +246,29 @@ header p{
 
 </head>
 
-
 <body>
 
 <a href="cluster.html" class="back-button">
 ← クラスタ分析へ戻る
 </a>
 
-
 <header>
 
-<h1>考察</h1>
+<h1>分析結果</h1>
 
 <p>
-クラスタ分析結果から得られた特徴について考察する
+クラスタ分析および都道府県別訪問率の変化
 </p>
 
 </header>
 
-
 <div class="container">
 
-
-<!-- 考察対象 -->
+<!-- 分析対象 -->
 
 <div class="section">
 
-<h2>考察対象クラスタ</h2>
+<h2>分析対象と分析方法</h2>
 
 <p>
 本研究では、2015年から2025年にかけての
@@ -307,72 +278,70 @@ K-means法によるクラスタ分析を行った。
 
 <p>
 その結果、4つのクラスタが形成された。
-本ページでは、その中でも同一クラスタに分類された
-<strong>韓国、台湾、香港、中国、タイ、シンガポール、
-マレーシア、インドネシア、フィリピン、ベトナム</strong>
-の10か国を対象として、訪問率の変化について考察する。
+本ページでは、そのうち同一クラスタに分類された
+韓国、台湾、香港、中国、タイ、シンガポール、
+マレーシア、インドネシア、フィリピン、ベトナムの
+アジア10か国・地域を対象とする。
 </p>
-
-<div class="point-box">
-
-<strong>分析方法</strong><br>
-
-2015年の都道府県別訪問率と2025年の都道府県別訪問率の差分を
-国ごとに算出し、47都道府県における変化パターンが
-似ている国をK-means法によって分類した。
-
-</div>
-
-</div>
-
-
-<!-- アジアクラスタ -->
-
-<div class="section">
-
-<h2>アジアクラスタの特徴</h2>
-
 
 <div class="feature-box">
 
-<b>主な特徴</b><br>
+<b>分析方法</b><br>
 
-✓ 東京・千葉・神奈川では訪問率が低下<br>
-
-✓ 山梨・京都・奈良などでは訪問率が上昇<br>
-
-✓ 同じクラスタ内でも、国によって増減には違いがみられる
+2015年の都道府県別訪問率と2025年の都道府県別訪問率の差分を
+国籍・地域ごとに算出し、47都道府県における変化パターンを
+K-means法によって分類した。
 
 </div>
 
+</div>
+
+<!-- アジアクラスタの結果 -->
+
+<div class="section">
+
+<h2>アジア10か国・地域の訪問率の変化</h2>
+
+<div class="feature-box">
+
+<b>確認された変化</b><br>
+
+✓ 東京都・千葉県・神奈川県では平均訪問率が低下<br>
+
+✓ 山梨県・京都府・奈良県などでは平均訪問率が上昇<br>
+
+✓ 都道府県によって訪問率の増減に違いがみられた
+
+</div>
 
 <p>
-アジア10か国では、2015年から2025年にかけて、
-東京・千葉・神奈川などの首都圏で訪問率が低下する一方、
-山梨・京都・奈良などでは訪問率が上昇する傾向がみられた。
+2015年から2025年にかけて、アジア10か国・地域の
+都道府県別訪問率の平均変化を比較した。
+東京都、千葉県、神奈川県では平均訪問率が低下し、
+山梨県、京都府、奈良県、福岡県、大阪府では
+平均訪問率が上昇した。
 </p>
 
 <p>
-特に山梨県では、10か国の多くで訪問率が上昇しており、
-今回のクラスタを特徴づける地域の一つとなっている。
-一方、京都府や奈良県では国によって増減が異なり、
-同じクラスタであっても訪問行動には違いがみられた。
+また、山梨県では10か国・地域のうち8か国・地域で
+訪問率が増加した。
+京都府と奈良県では、それぞれ6か国・地域で増加し、
+4か国・地域で減少した。
 </p>
-
 
 <!-- グラフ -->
 
 <div class="chart-area">
 
 <div class="chart-title">
-アジア10か国における訪問率の平均変化
+アジア10か国・地域における訪問率の平均変化
 </div>
 
 <div class="chart-description">
 2015年から2025年にかけての訪問率の変化を、
-アジア10か国の平均値で示しています。
+アジア10か国・地域の平均値で示している。
 0を基準として、プラスは訪問率の上昇、
-マイナスは低下を表します。
+マイナスは低下を表す。
 </div>
 
 <div class="bar-chart">
@@ -382,7 +351,6 @@ K-means法によるクラスタ分析を行った。
 <div id="chartRows"></div>
 
 </div>
-
 
 <div class="chart-legend">
 
@@ -398,134 +366,47 @@ K-means法によるクラスタ分析を行った。
 
 </div>
 
-
 <div class="chart-note">
-※ 2015年と2025年の都道府県別訪問率の差分を、
-アジア10か国について平均した値。
-表示しているのは特徴がみられた主な都道府県のみ。
+※2015年と2025年の都道府県別訪問率の差分を、
+アジア10か国・地域について平均した値。
+表示しているのは主な都道府県のみ。
 </div>
-
-</div>
-
-
-<p>
-この結果から、アジアクラスタでは東京などの主要都市への訪問が
-一律に増加しているのではなく、一部の周辺地域や観光地へ
-訪問先が広がっていることが示唆される。
-</p>
-
-<p>
-ただし、すべての地域で同じ変化がみられたわけではない。
-そのため、アジアクラスタを一つのまとまりとして捉えるだけでなく、
-国ごとの訪問行動の違いにも着目する必要がある。
-</p>
-
-</div>
-
-
-<!-- 考察 -->
-
-<div class="section">
-
-<h2>考察</h2>
-
-<p>
-アジア10か国が同じクラスタに分類されたことから、
-これらの国には2015年から2025年にかけた
-都道府県訪問率の変化パターンに一定の共通性があると考えられる。
-</p>
-
-<p>
-一方で、クラスタ内のすべての国が同じ変化を示したわけではない。
-例えば、京都府では訪問率が上昇した国がある一方、
-低下した国も確認された。
-このことから、クラスタ分析によって共通する傾向を把握するとともに、
-個々の国の特徴を確認することも重要である。
-</p>
-
-<p>
-また、山梨県など一部の地域で訪問率が上昇していることから、
-訪問先が東京・大阪・京都などの主要観光地だけに限定されず、
-周辺地域や地方部へ広がっている可能性が示唆される。
-</p>
-
-<div class="conclusion-box">
-
-<b>まとめると、</b><br>
-
-アジアクラスタでは、
-主要都市の訪問率が低下する一方で、
-一部の地方・周辺地域の訪問率が上昇する傾向が確認された。
-このことから、訪日外国人の訪問行動には、
-主要観光地を中心とした行動だけでなく、
-訪問先を広げる動きもみられることが示唆される。
 
 </div>
 
 </div>
 
-
-<!-- 研究上の注意 -->
+<!-- 分析結果を見る際の注意点 -->
 
 <div class="section">
 
 <h2>分析結果を見る際の注意点</h2>
 
 <p>
-本研究では2015年と2025年の2時点を比較しているため、
-その間に発生した新型コロナウイルス感染症の流行や
-国際的な旅行環境の変化なども訪問率に影響している可能性がある。
+本研究では2015年と2025年の2時点を比較している。
+そのため、今回確認された訪問率の増減は、
+2015年から2025年までの期間における変化を示すものであり、
+変化が生じた時期や要因を特定するものではない。
 </p>
 
 <p>
-そのため、今回確認された訪問率の変化を、
-旅行者の観光嗜好の変化だけによるものと断定することはできない。
-今後は複数年のデータや旅行目的、滞在日数などを組み合わせることで、
-より詳細な観光行動の変化を分析する必要がある。
+また、訪問率の変化には、新型コロナウイルス感染症の流行や
+国際的な旅行環境の変化など、複数の要因が関係している可能性がある。
+今回のデータのみから、訪問率の変化の原因を断定することはできない。
 </p>
 
 </div>
 
-
-<!-- まとめ -->
-
-<div class="section">
-
-<h2>まとめ</h2>
-
-<p>
-クラスタ分析によって、国ごとの訪問率の変化パターンを
-グループとして捉えることができた。
-</p>
-
-<p>
-特にアジア10か国では、
-首都圏の訪問率低下と一部地域の訪問率上昇という
-共通した傾向が確認された一方、
-国による違いもみられた。
-</p>
-
-<p>
-この結果は、訪日外国人の観光行動を考える際に、
-国籍ごとの特徴と訪問先の変化を
-合わせて捉えることの重要性を示している。
-</p>
-
 </div>
-
-
-</div>
-
 
 <div class="footer">
 2026 Graduation Research.
 </div>
 
-
 <script>
 
 /* --------------------------------
-   アジア10市場
+   アジア10か国・地域
    2015年 → 2025年の平均差分
 -------------------------------- */
 
@@ -564,7 +445,6 @@ const chartData = [
     }
 ];
 
-
 /* --------------------------------
    グラフ作成
 -------------------------------- */
@@ -578,16 +458,12 @@ function createChart(){
         return;
     }
 
-
-    /* 最大値 */
-
     const maxValue =
         Math.max(
             ...chartData.map(item =>
                 Math.abs(item.value)
             )
         );
-
 
     chartData.forEach(item => {
 
@@ -596,88 +472,49 @@ function createChart(){
 
         row.className = "bar-row";
 
-
-        /* 都道府県名 */
-
         const label =
             document.createElement("div");
 
         label.className = "bar-label";
-
-        label.textContent =
-            item.prefecture;
-
-
-        /* 棒グラフ部分 */
+        label.textContent = item.prefecture;
 
         const container =
             document.createElement("div");
 
-        container.className =
-            "bar-container";
-
+        container.className = "bar-container";
 
         const bar =
             document.createElement("div");
 
-
         if(item.value >= 0){
-
-            bar.className =
-                "bar positive";
-
+            bar.className = "bar positive";
         }else{
-
-            bar.className =
-                "bar negative";
-
+            bar.className = "bar negative";
         }
-
-
-        /* 棒の長さ */
 
         const width =
             Math.abs(item.value)
             / maxValue
             * 50;
 
-
-        bar.style.width =
-            width + "%";
-
+        bar.style.width = width + "%";
 
         container.appendChild(bar);
-
-
-        /* 数値 */
 
         const value =
             document.createElement("div");
 
-        value.className =
-            "bar-value";
-
+        value.className = "bar-value";
 
         const sign =
-            item.value > 0
-                ? "+"
-                : "";
-
+            item.value > 0 ? "+" : "";
 
         value.textContent =
-            sign +
-            item.value.toFixed(2) +
-            "pt";
-
-
-        /* 行に追加 */
+            sign + item.value.toFixed(2) + "pt";
 
         row.appendChild(label);
-
         row.appendChild(container);
-
         row.appendChild(value);
-
 
         chartRows.appendChild(row);
 
@@ -685,15 +522,11 @@ function createChart(){
 
 }
 
-
-/* --------------------------------
-   実行
--------------------------------- */
-
+/* 実行 */
 createChart();
 
 </script>
 
-
 </body>
 </html>
+
